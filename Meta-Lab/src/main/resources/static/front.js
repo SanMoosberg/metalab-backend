@@ -35,14 +35,13 @@ const Contacts = {
     `
 };
 
-// Компонент для входа и регистрации
 const Auth = {
     data() {
         return {
-            isLogin: true,  // Переключатель между логином и регистрацией
+            isLogin: true,
             name: '',
             password: '',
-            confirmPassword: '', // Для регистрации
+            confirmPassword: '',
             errorMessage: '',
             successMessage: ''
         };
