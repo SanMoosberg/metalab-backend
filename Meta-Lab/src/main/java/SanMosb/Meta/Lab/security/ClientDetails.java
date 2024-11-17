@@ -21,6 +21,7 @@ public class ClientDetails implements UserDetails {
 
     @Override
     public String getPassword() {
+        System.out.println("Stored Password (from ClientDetails): " + this.client.getPassword());
         return this.client.getPassword();
     }
 

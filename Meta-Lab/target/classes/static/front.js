@@ -40,7 +40,7 @@ const Auth = {
     data() {
         return {
             isLogin: true,  // Переключатель между логином и регистрацией
-            username: '',
+            name: '',
             password: '',
             confirmPassword: '', // Для регистрации
             errorMessage: '',
@@ -50,16 +50,31 @@ const Auth = {
     methods: {
         async login() {
             try {
-                const response = await axios.post('/api/auth/login', {
-                    name: this.username,
-                    password: this.password
+                const params = new URLSearchParams();
+                params.append('name', this.name);
+                params.append('password', this.password);
+
+                const response = await axios.post('/api/auth/login', params, {
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    }
                 });
-                alert("Login successful!");
-                this.$router.push('/');  // Перенаправление на главную страницу после успешного логина
+
+                if (response.status === 200) {
+                    alert("Login successful!");
+                    this.$router.push('/');
+                }
             } catch (error) {
-                this.errorMessage = 'Неправильное имя пользователя или пароль';
+                console.log('Username:', this.name);
+                console.log('Password:', this.password);
+                if (error.response && error.response.status === 401) {
+                    this.errorMessage = 'Неправильное имя пользователя или пароль';
+                } else {
+                    this.errorMessage = 'Произошла ошибка при попытке входа.';
+                }
             }
         },
+
         async register() {
             if (this.password !== this.confirmPassword) {
                 this.errorMessage = "Пароли не совпадают!";
@@ -68,7 +83,7 @@ const Auth = {
 
             try {
                 const response = await axios.post('/api/auth/register', {
-                    name: this.username,
+                    name: this.name,
                     password: this.password
                 });
                 this.successMessage = "Регистрация успешна! Вы можете войти.";
@@ -91,8 +106,8 @@ const Auth = {
             <h2 v-else>Регистрация</h2>
 
             <form @submit.prevent="isLogin ? login() : register()">
-                <label for="username">Имя пользователя</label>
-                <input type="text" v-model="username" required>
+                <label for="name">Имя пользователя</label>
+                <input type="text" v-model="name" required>
 
                 <label for="password">Пароль</label>
                 <input type="password" v-model="password" required>

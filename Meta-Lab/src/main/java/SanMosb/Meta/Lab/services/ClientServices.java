@@ -39,7 +39,6 @@ public class ClientServices {
     }
     @Transactional
     public Client save(Client client) {
-        client.setPassword(passwordEncoder.encode(client.getPassword()));
         clientRepository.save(client);
         return client;
     }
