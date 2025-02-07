@@ -3,6 +3,10 @@ package SanMosb.Meta.Lab.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,13 +20,20 @@ public class Client {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "name")
-    private String name;
+    @Column(name = "username", unique = true, nullable = false)
+    @NotBlank(message = "Имя пользователя не может быть пустым")
+    @Size(min = 3, max = 20, message = "Имя пользователя должно содержать от 3 до 20 символов")
+    private String username;
 
-    @Column(name = "password")
+    @Column(name = "password", nullable = false)
+    @NotBlank(message = "Пароль не может быть пустым")
+    @Size(min = 8, message = "Пароль должен содержать минимум 8 символов")
+    @Pattern(regexp = "^(?=.*[A-Z])(?=.*\\d).*$", message = "Пароль должен содержать хотя бы одну заглавную букву и одну цифру")
     private String password;
 
-    @Column(name = "email")
+    @Column(name = "email", unique = true, nullable = false)
+    @NotBlank(message = "Email не может быть пустым")
+    @Email(message = "Email должен быть в корректном формате")
     private String email;
 
     @ManyToMany
@@ -33,21 +44,24 @@ public class Client {
     @JsonIgnoreProperties("buyers")
     private List<Product> productList = new ArrayList<>();
 
-    public Client(String name, String password, String email) {
-        this.name = name;
+    @Column(name = "role")
+    private String role;
+
+    public Client(String username, String password, String email, String role) {
+        this.username = username;
         this.password = password;
         this.email = email;
+        this.role = role;
     }
-
     public Client() {
     }
 
-    public String getName() {
-        return name;
+    public String getUsername() {
+        return username;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPassword() {
@@ -85,5 +99,13 @@ public class Client {
     public void removeOrder(Product product){
         this.productList.remove(product);
         product.getBuyers().remove(this);
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 }

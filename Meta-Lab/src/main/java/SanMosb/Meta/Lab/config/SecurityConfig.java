@@ -1,36 +1,33 @@
 package SanMosb.Meta.Lab.config;
 
+import SanMosb.Meta.Lab.jwt.JwtAuthenticationFilter;
+import SanMosb.Meta.Lab.jwt.JwtUtils;
 import SanMosb.Meta.Lab.services.ClientDetailsServices;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
-    private final ClientDetailsServices clientDetailsServices;
+    @Autowired
+    private ClientDetailsServices clientDetailsServices;
 
     @Autowired
-    public SecurityConfig(ClientDetailsServices clientDetailsServices) {
-        this.clientDetailsServices = clientDetailsServices;
-    }
-
-    @Bean
-    public UserDetailsService userDetailsService() {
-        return clientDetailsServices;
-    }
+    private JwtUtils jwtUtils; // Внедренный экземпляр
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -38,45 +35,24 @@ public class SecurityConfig {
     }
 
     @Bean
-    public DaoAuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-        authProvider.setUserDetailsService(clientDetailsServices);
-        authProvider.setPasswordEncoder(passwordEncoder());
-        return authProvider;
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-                .csrf(csrf -> csrf.disable())
-                .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/admin/**").authenticated()
-                        .anyRequest().permitAll()
-                )
-                .formLogin(form -> form
-                        .loginProcessingUrl("/api/auth/login")
-                        .usernameParameter("name")
-                        .passwordParameter("password")
-                        .successHandler(authenticationSuccessHandler())
-                        .failureHandler(authenticationFailureHandler())
-                )
-                .logout(logout -> logout
-                        .logoutUrl("/api/auth/logout")
-                        .logoutSuccessUrl("/login?logout=true")
-                        .invalidateHttpSession(true)
-                        .deleteCookies("JSESSIONID")
-                )
-                .authenticationProvider(authenticationProvider());
-
-        return http.build();
+    public JwtAuthenticationFilter jwtAuthenticationFilter() {
+        return new JwtAuthenticationFilter(jwtUtils, clientDetailsServices);
     }
 
     @Bean
     public AuthenticationSuccessHandler authenticationSuccessHandler() {
         return (request, response, authentication) -> {
-            response.setStatus(HttpServletResponse.SC_OK);
+            String username = authentication.getName();
+            String jwt = jwtUtils.generateJwtToken(username); // Используем внедренный экземпляр
+
             response.setContentType("application/json");
-            response.getWriter().write("{\"message\": \"Login successful\"}");
+            response.getWriter().write("{\"token\": \"" + jwt + "\"}");
+            response.getWriter().flush();
         };
     }
 
@@ -85,7 +61,39 @@ public class SecurityConfig {
         return (request, response, exception) -> {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.setContentType("application/json");
-            response.getWriter().write("{\"error\": \"Invalid username or password\"}");
+            response.getWriter().write("{\"error\": \"Неверные учетные данные. Попробуйте снова.\"}");
+            response.getWriter().flush();
         };
+    }
+
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        JsonUsernamePasswordAuthenticationFilter customAuthFilter = new JsonUsernamePasswordAuthenticationFilter();
+        customAuthFilter.setAuthenticationManager(authenticationManager(http.getSharedObject(AuthenticationConfiguration.class)));
+        customAuthFilter.setFilterProcessesUrl("/api/auth/login");
+        customAuthFilter.setAuthenticationSuccessHandler(authenticationSuccessHandler());
+        customAuthFilter.setAuthenticationFailureHandler(authenticationFailureHandler());
+
+        http
+                .csrf(csrf -> csrf.disable())
+                .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers("/**", "/index.html", "/static/**", "/front.js", "/style.css").permitAll()
+                        .requestMatchers("/api/auth/login", "/api/auth/register").permitAll()
+                        .requestMatchers("/api/products").permitAll()
+                        .anyRequest().authenticated()
+                )
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .logout(logout -> logout
+                        .logoutUrl("/api/auth/logout")
+                        .logoutSuccessHandler((request, response, authentication) -> {
+                            response.setStatus(HttpServletResponse.SC_OK);
+                            response.getWriter().write("{\"message\": \"Вы успешно вышли из системы.\"}");
+                            response.getWriter().flush();
+                        })
+                )
+                .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
+                .addFilterAt(customAuthFilter, UsernamePasswordAuthenticationFilter.class);
+
+        return http.build();
     }
 }

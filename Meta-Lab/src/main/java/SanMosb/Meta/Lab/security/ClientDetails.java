@@ -27,7 +27,7 @@ public class ClientDetails implements UserDetails {
 
     @Override
     public String getUsername() {
-        return this.client.getName();
+        return this.client.getUsername();
     }
 
     @Override

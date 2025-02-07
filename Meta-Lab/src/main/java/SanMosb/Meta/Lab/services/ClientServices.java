@@ -33,8 +33,8 @@ public class ClientServices {
         Optional<Client> foundClient = clientRepository.findById(id);
         return foundClient.orElse(null);
     }
-    public Client findByName(String name){
-        Optional<Client> foundClient = clientRepository.findByName(name);
+    public Client findByUsername(String username){
+        Optional<Client> foundClient = clientRepository.findByUsername(username);
         return foundClient.orElse(null);
     }
     @Transactional
@@ -43,8 +43,8 @@ public class ClientServices {
         return client;
     }
     @Transactional
-    public void update(String name, String email, Client updatedClient){
-        updatedClient.setName(name);
+    public void update(String username, String email, Client updatedClient){
+        updatedClient.setUsername(username);
         updatedClient.setEmail(email);
         clientRepository.save(updatedClient);
     }

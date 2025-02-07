@@ -10,25 +10,34 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 <body>
-<div id="app">
-    <header>
-        <div class="logo">
-            <router-link to="/"><h1>MetaLaboratory</h1></router-link>
-        </div>
-        <nav>
-            <ul>
-                <li><router-link to="/about">О нас</router-link></li>
-                <li><router-link to="/catalog">Каталог</router-link></li>
-                <li><router-link to="/contacts">Контакты</router-link></li>
-                <li><router-link to="/login">Вход</router-link></li>
-            </ul>
-        </nav>
-    </header>
-    <router-view></router-view>
-    <footer>
-        <p>&copy; 2024 MetaLaboratory Inc. Все права защищены.</p>
-    </footer>
-</div>
+    <div id="app">
+        <header>
+            <div class="logo">
+                <router-link to="/">
+                    <h1>MetaLaboratory</h1>
+                </router-link>
+            </div>
+            <nav>
+                <ul>
+                    <li><router-link to="/about">О нас</router-link></li>
+                    <li><router-link to="/catalog">Каталог</router-link></li>
+                    <li><router-link to="/contacts">Контакты</router-link></li>
+                    <li>
+                        <router-link v-if="!isAuthenticated" to="/login">Вход</router-link>
+                        <router-link v-else to="/profile">Личный кабинет</router-link>
+                    </li>
+                </ul>
+            </nav>
+        </header>
+        
+        <main>
+            <router-view></router-view>
+        </main>
+
+        <footer>
+            <p>&copy; 2024 MetaLaboratory Inc. Все права защищены.</p>
+        </footer>
+    </div>
+    <script src="/front.js"></script>
 </body>
-<script src="/front.js"></script>
 </html>

@@ -23,7 +23,7 @@ public class ClientDetailsServices implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<Client> client = clientRepository.findByName(username);
+        Optional<Client> client = clientRepository.findByUsername(username);
         if (client.isEmpty())
             throw new UsernameNotFoundException("User not found!");
         return new ClientDetails(client.get());
