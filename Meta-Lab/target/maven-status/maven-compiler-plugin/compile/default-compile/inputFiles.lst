@@ -1,0 +1,12 @@
+/Users/sanderkulli/IdeaProjects/MetaLab/Meta-Lab/src/main/java/SanMosb/Meta/Lab/repositories/ProductRepository.java
+/Users/sanderkulli/IdeaProjects/MetaLab/Meta-Lab/src/main/java/SanMosb/Meta/Lab/models/Product.java
+/Users/sanderkulli/IdeaProjects/MetaLab/Meta-Lab/src/main/java/SanMosb/Meta/Lab/controllers/AuthController.java
+/Users/sanderkulli/IdeaProjects/MetaLab/Meta-Lab/src/main/java/SanMosb/Meta/Lab/controllers/MainController.java
+/Users/sanderkulli/IdeaProjects/MetaLab/Meta-Lab/src/main/java/SanMosb/Meta/Lab/services/ProductServices.java
+/Users/sanderkulli/IdeaProjects/MetaLab/Meta-Lab/src/main/java/SanMosb/Meta/Lab/security/ClientDetails.java
+/Users/sanderkulli/IdeaProjects/MetaLab/Meta-Lab/src/main/java/SanMosb/Meta/Lab/config/SecurityConfig.java
+/Users/sanderkulli/IdeaProjects/MetaLab/Meta-Lab/src/main/java/SanMosb/Meta/Lab/services/ClientServices.java
+/Users/sanderkulli/IdeaProjects/MetaLab/Meta-Lab/src/main/java/SanMosb/Meta/Lab/MetaLabApplication.java
+/Users/sanderkulli/IdeaProjects/MetaLab/Meta-Lab/src/main/java/SanMosb/Meta/Lab/services/ClientDetailsServices.java
+/Users/sanderkulli/IdeaProjects/MetaLab/Meta-Lab/src/main/java/SanMosb/Meta/Lab/repositories/ClientRepository.java
+/Users/sanderkulli/IdeaProjects/MetaLab/Meta-Lab/src/main/java/SanMosb/Meta/Lab/models/Client.java

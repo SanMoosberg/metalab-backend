@@ -1,0 +1,12 @@
+SanMosb/Meta/Lab/security/ClientDetails.class
+SanMosb/Meta/Lab/controllers/MainController.class
+SanMosb/Meta/Lab/models/Product.class
+SanMosb/Meta/Lab/MetaLabApplication.class
+SanMosb/Meta/Lab/models/Client.class
+SanMosb/Meta/Lab/config/SecurityConfig.class
+SanMosb/Meta/Lab/repositories/ClientRepository.class
+SanMosb/Meta/Lab/controllers/AuthController.class
+SanMosb/Meta/Lab/services/ClientDetailsServices.class
+SanMosb/Meta/Lab/repositories/ProductRepository.class
+SanMosb/Meta/Lab/services/ClientServices.class
+SanMosb/Meta/Lab/services/ProductServices.class
