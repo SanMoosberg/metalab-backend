@@ -10,14 +10,57 @@ const Home = {
             <img src="images/lab-automation.jpg" alt="Лабораторное оборудование" />
         </div>
     </section>
-    
-    <section class="hero-block reverse">
+
+    <section class="hero-block">
         <div class="hero-block__image">
-            <img src="images/lab-automation.jpg" alt="Современные технологии" />
+            <img src="images/lab-equipment.jpg" alt="Современные технологии" />
         </div>
         <div class="hero-block__text">
-            <h2>Качество и надежность</h2>
-            <p>Все наше оборудование соответствует международным стандартам качества и имеет необходимые сертификаты. Мы гарантируем надежность и долговечность поставляемых решений.</p>
+            <h2>Современное оснащение</h2>
+            <p>Мы используем только современное оборудование от ведущих мировых производителей. Все приборы регулярно проходят поверку и техническое обслуживание, что гарантирует точность и надежность результатов исследований.</p>
+        </div>
+    </section>
+
+    <section class="hero-block">
+        <div class="hero-block__text">
+            <h3>Гарантия качества</h3>
+            <p>Наша лаборатория имеет все необходимые лицензии и сертификаты. Мы регулярно участвуем в программах внешнего контроля качества и постоянно совершенствуем наши методики.</p>
+            <ul class="quality-list">
+                <li>Лицензия на медицинскую деятельность</li>
+                <li>Сертификаты ISO 9001:2015</li>
+                <li>Участие в международных программах контроля качества</li>
+                <li>Регулярное повышение квалификации персонала</li>
+            </ul>
+        </div>
+        <div class="hero-block__image">
+            <img src="images/lab-quality.jpg" alt="Гарантия качества" />
+        </div>
+    </section>
+    
+    <section class="advantages-section">
+        <h3>Наши преимущества</h3>
+        <div class="advantages-grid">
+            <div class="advantage-card">
+                <div class="advantage-icon">
+                    <img src="images/icon-quality.svg" alt="Качество">
+                </div>
+                <h4>Высокая точность</h4>
+                <p>Современное оборудование и строгий контроль качества</p>
+            </div>
+            <div class="advantage-card">
+                <div class="advantage-icon">
+                    <img src="images/icon-speed.svg" alt="Скорость">
+                </div>
+                <h4>Быстрые результаты</h4>
+                <p>Выдача результатов в кратчайшие сроки</p>
+            </div>
+            <div class="advantage-card">
+                <div class="advantage-icon">
+                    <img src="images/icon-experts.svg" alt="Специалисты">
+                </div>
+                <h4>Опытные специалисты</h4>
+                <p>Команда квалифицированных врачей и лаборантов</p>
+            </div>
         </div>
     </section>
 </div>
@@ -27,11 +70,6 @@ const Home = {
 const About = {
     template: `
         <div class="about-container">
-            <section class="about-hero">
-                <h2>О нашей лаборатории</h2>
-                <p class="about-subtitle">Инновации и качество с 2010 года</p>
-            </section>
-
             <section class="about-section">
                 <div class="about-content">
                     <h3>Наша история</h3>
@@ -42,56 +80,35 @@ const About = {
                 </div>
             </section>
 
-            <section class="about-section reverse">
+            <section class="about-section">
                 <div class="about-image">
-                    <img src="images/about-lab-2.jpg" alt="Оборудование">
+                    <img src="images/about-lab-2.jpg" alt="Миссия">
                 </div>
                 <div class="about-content">
-                    <h3>Современное оснащение</h3>
-                    <p>Мы используем только современное оборудование от ведущих мировых производителей. Все приборы регулярно проходят поверку и техническое обслуживание, что гарантирует точность и надежность результатов исследований.</p>
-                </div>
-            </section>
-
-            <section class="about-advantages">
-                <h3>Наши преимущества</h3>
-                <div class="advantages-grid">
-                    <div class="advantage-card">
-                        <div class="advantage-icon">
-                            <img src="images/icon-quality.svg" alt="Качество">
-                        </div>
-                        <h4>Высокая точность</h4>
-                        <p>Современное оборудование и строгий контроль качества</p>
-                    </div>
-                    <div class="advantage-card">
-                        <div class="advantage-icon">
-                            <img src="images/icon-speed.svg" alt="Скорость">
-                        </div>
-                        <h4>Быстрые результаты</h4>
-                        <p>Выдача результатов в кратчайшие сроки</p>
-                    </div>
-                    <div class="advantage-card">
-                        <div class="advantage-icon">
-                            <img src="images/icon-experts.svg" alt="Специалисты">
-                        </div>
-                        <h4>Опытные специалисты</h4>
-                        <p>Команда квалифицированных врачей и лаборантов</p>
-                    </div>
+                    <h3>Наша миссия</h3>
+                    <p>Мы стремимся сделать высококачественную лабораторную диагностику доступной для каждого. Наша миссия - помогать врачам и пациентам получать точную и своевременную информацию о здоровье, используя передовые технологии и профессиональный опыт.</p>
+                    <ul class="mission-list">
+                        <li>Обеспечение высочайшего качества исследований</li>
+                        <li>Внедрение инновационных методик</li>
+                        <li>Постоянное совершенствование сервиса</li>
+                        <li>Забота о здоровье каждого пациента</li>
+                    </ul>
                 </div>
             </section>
 
             <section class="about-section">
                 <div class="about-content">
-                    <h3>Гарантия качества</h3>
-                    <p>Наша лаборатория имеет все необходимые лицензии и сертификаты. Мы регулярно участвуем в программах внешнего контроля качества и постоянно совершенствуем наши методики.</p>
-                    <ul class="quality-list">
-                        <li>Лицензия на медицинскую деятельность</li>
-                        <li>Сертификаты ISO 9001:2015</li>
-                        <li>Участие в международных программах контроля качества</li>
-                        <li>Регулярное повышение квалификации персонала</li>
+                    <h3>Наши цели</h3>
+                    <p>Мы постоянно развиваемся и ставим перед собой амбициозные цели для улучшения качества медицинской диагностики в России.</p>
+                    <ul class="mission-list">
+                        <li>Внедрение новейших методов диагностики и автоматизации процессов</li>
+                        <li>Расширение сети лабораторий и пунктов забора анализов</li>
+                        <li>Развитие профессиональных компетенций медицинского персонала</li>
+                        <li>Укрепление партнерских отношений с медицинскими учреждениями</li>
                     </ul>
                 </div>
                 <div class="about-image">
-                    <img src="images/about-lab-3.jpg" alt="Сертификаты">
+                    <img src="images/about-lab-3.jpg" alt="Наши цели">
                 </div>
             </section>
         </div>
@@ -152,8 +169,6 @@ const Catalog = {
     },
     template: `
         <div class="catalog-container">
-            <h2 class="catalog-title">Каталог анализов</h2>
-            
             <div class="products-grid">
                 <div v-for="product in products" :key="product.id" class="product-card">
                     <div class="product-content">
@@ -204,65 +219,62 @@ const Catalog = {
 const Contacts = {
     template: `
         <div class="contacts-container">
-            <h2 class="contacts-title">Контакты</h2>
-            
             <div class="contacts-grid">
                 <div class="contact-info">
-                    <div class="info-block">
+                    <div class="info-block main-info">
                         <h3>Адрес</h3>
                         <p>г. Москва, ул. Академика Королева, 12</p>
                         <p>Медицинский центр "MetaLaboratory"</p>
                         <p class="info-detail">5 минут от м. ВДНХ</p>
+                        <div class="transport-details">
+                            <p>Как добраться:</p>
+                            <p>• От метро ВДНХ: пешком 5 минут по аллее Космонавтов</p>
+                            <p>• Автобусы: 15, 24, 85 (остановка "Улица Академика Королева")</p>
+                            <p>• Троллейбусы: 13, 69 (остановка "ВДНХ-Южная")</p>
+                        </div>
                     </div>
                     
-                    <div class="info-block">
-                        <h3>Телефоны</h3>
-                        <p>
-                            <a href="tel:+74951234567">+7 (495) 123-45-67</a>
-                            <span class="info-detail">Общие вопросы</span>
-                        </p>
-                        <p>
-                            <a href="tel:+74951234568">+7 (495) 123-45-68</a>
-                            <span class="info-detail">Запись на анализы</span>
-                        </p>
-                    </div>
-                    
-                    <div class="info-block">
-                        <h3>Режим работы</h3>
-                        <p>Пн-Пт: 8:00 - 20:00</p>
-                        <p>Сб: 9:00 - 18:00</p>
-                        <p>Вс: 9:00 - 16:00</p>
-                    </div>
-                    
-                    <div class="info-block">
-                        <h3>Email</h3>
-                        <p>
-                            <a href="mailto:info@metalab.ru">info@metalab.ru</a>
-                            <span class="info-detail">Общие вопросы</span>
-                        </p>
-                        <p>
-                            <a href="mailto:support@metalab.ru">support@metalab.ru</a>
-                            <span class="info-detail">Техническая поддержка</span>
-                        </p>
+                    <div class="info-block additional-info">
+                        <div>
+                            <h3>Телефоны</h3>
+                            <p>
+                                <a href="tel:+74951234567">+7 (495) 123-45-67</a>
+                                <span class="info-detail">Общие вопросы</span>
+                            </p>
+                            <p>
+                                <a href="tel:+74951234568">+7 (495) 123-45-68</a>
+                                <span class="info-detail">Запись на анализы</span>
+                            </p>
+                        </div>
+                        
+                        <div>
+                            <h3>Режим работы</h3>
+                            <p>Пн-Пт: 8:00 - 20:00</p>
+                            <p>Сб: 9:00 - 18:00</p>
+                            <p>Вс: 9:00 - 16:00</p>
+                        </div>
+                        
+                        <div>
+                            <h3>Email</h3>
+                            <p>
+                                <a href="mailto:info@metalab.ru">info@metalab.ru</a>
+                                <span class="info-detail">Общие вопросы</span>
+                            </p>
+                            <p>
+                                <a href="mailto:support@metalab.ru">support@metalab.ru</a>
+                                <span class="info-detail">Техническая поддержка</span>
+                            </p>
+                        </div>
                     </div>
                 </div>
                 
                 <div class="contact-map">
-                    <div class="map-placeholder">
-                        <!-- Здесь будет карта -->
-                        <p>Карта загружается...</p>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="contact-additional">
-                <div class="transport-info">
-                    <h3>Как добраться</h3>
-                    <ul>
-                        <li>От метро ВДНХ: пешком 5 минут по аллее Космонавтов</li>
-                        <li>Автобусы: 15, 24, 85 (остановка "Улица Академика Королева")</li>
-                        <li>Троллейбусы: 13, 69 (остановка "ВДНХ-Южная")</li>
-                    </ul>
+                    <iframe 
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2092.347992602746!2d26.678260577264577!3d58.37066788738478!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x46eb3708ae89c8c5%3A0x9ee86db8e6696d74!2sArhitekti%20tn%2010%2C%2050407%20Tartu!5e0!3m2!1set!2see!4v1739274113884!5m2!1set!2see" 
+                        allowfullscreen="" 
+                        loading="lazy" 
+                        referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
                 </div>
             </div>
         </div>
