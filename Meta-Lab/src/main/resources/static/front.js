@@ -27,6 +27,42 @@ const Home = {
                 </div>
             </section>
 
+            <section class="content-section advantages">
+                <div class="advantages-container">
+                    <h2>Почему выбирают нас?</h2>
+                    <div class="advantages-list">
+                        <div class="advantage-item">
+                            <div class="advantage-circle">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <h3>Быстрые результаты</h3>
+                            <p>Выдача результатов от 2 часов до 1 дня</p>
+                        </div>
+                        <div class="advantage-item">
+                            <div class="advantage-circle">
+                                <i class="fas fa-medal"></i>
+                            </div>
+                            <h3>Точность</h3>
+                            <p>Современное оборудование экспертного класса</p>
+                        </div>
+                        <div class="advantage-item">
+                            <div class="advantage-circle">
+                                <i class="fas fa-wallet"></i>
+                            </div>
+                            <h3>Доступные цены</h3>
+                            <p>Гибкая система скидок и акции</p>
+                        </div>
+                        <div class="advantage-item">
+                            <div class="advantage-circle">
+                                <i class="fas fa-user-md"></i>
+                            </div>
+                            <h3>Опытные специалисты</h3>
+                            <p>Врачи высшей категории</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
             <section class="content-section light-pink">
                 <div class="section-content">
                     <div class="text-block">
@@ -56,46 +92,52 @@ const Home = {
 
 const About = {
     template: `
-        <div class="about-container">
-            <section class="about-section">
-                <div class="about-content">
-                    <h3>Наша история</h3>
-                    <p>MetaLaboratory начала свою работу в 2010 году как небольшая частная лаборатория. За прошедшие годы мы выросли в современный диагностический центр, оснащенный передовым оборудованием и укомплектованный командой высококвалифицированных специалистов.</p>
-                </div>
-                <div class="about-image">
-                    <img src="images/about-lab-1.jpg" alt="История лаборатории">
-                </div>
-            </section>
-
-            <section class="about-section">
-                <div class="about-image">
-                    <img src="images/about-lab-2.jpg" alt="Миссия">
-                </div>
-                <div class="about-content">
-                    <h3>Наша миссия</h3>
-                    <p>Мы стремимся сделать высококачественную лабораторную диагностику доступной для каждого. Наша миссия - помогать врачам и пациентам получать точную и своевременную информацию о здоровье, используя передовые технологии и профессиональный опыт.</p>
-                    <ul class="mission-list">
-                        <li>Обеспечение высочайшего качества исследований</li>
-                        <li>Внедрение инновационных методик</li>
-                        <li>Постоянное совершенствование сервиса</li>
-                        <li>Забота о здоровье каждого пациента</li>
-                    </ul>
+        <div class="home-container">
+            <section class="content-section beige">
+                <div class="section-content">
+                    <div class="text-block">
+                        <h2>Наша история</h2>
+                        <p>MetaLaboratory начала свою работу в 2010 году как небольшая частная лаборатория. За прошедшие годы мы выросли в современный диагностический центр, оснащенный передовым оборудованием и укомплектованный командой высококвалифицированных специалистов.</p>
+                    </div>
+                    <div class="image-block">
+                        <img src="images/about-lab-1.jpg" alt="История лаборатории">
+                    </div>
                 </div>
             </section>
 
-            <section class="about-section">
-                <div class="about-content">
-                    <h3>Наши цели</h3>
-                    <p>Мы постоянно развиваемся и ставим перед собой амбициозные цели для улучшения качества медицинской диагностики в России.</p>
-                    <ul class="mission-list">
-                        <li>Внедрение новейших методов диагностики и автоматизации процессов</li>
-                        <li>Расширение сети лабораторий и пунктов забора анализов</li>
-                        <li>Развитие профессиональных компетенций медицинского персонала</li>
-                        <li>Укрепление партнерских отношений с медицинскими учреждениями</li>
-                    </ul>
+            <section class="content-section white">
+                <div class="section-content reverse">
+                    <div class="text-block">
+                        <h2>Наша миссия</h2>
+                        <p>Мы стремимся сделать высококачественную лабораторную диагностику доступной для каждого. Наша миссия - помогать врачам и пациентам получать точную и своевременную информацию о здоровье, используя передовые технологии и профессиональный опыт.</p>
+                        <ul class="mission-list">
+                            <li>Обеспечение высочайшего качества исследований</li>
+                            <li>Внедрение инновационных методик</li>
+                            <li>Постоянное совершенствование сервиса</li>
+                            <li>Забота о здоровье каждого пациента</li>
+                        </ul>
+                    </div>
+                    <div class="image-block">
+                        <img src="images/about-lab-2.jpg" alt="Миссия">
+                    </div>
                 </div>
-                <div class="about-image">
-                    <img src="images/about-lab-3.jpg" alt="Наши цели">
+            </section>
+
+            <section class="content-section light-pink">
+                <div class="section-content">
+                    <div class="text-block">
+                        <h2>Наши цели</h2>
+                        <p>Мы постоянно развиваемся и ставим перед собой амбициозные цели для улучшения качества медицинской диагностики в России.</p>
+                        <ul class="mission-list">
+                            <li>Внедрение новейших методов диагностики и автоматизации процессов</li>
+                            <li>Расширение сети лабораторий и пунктов забора анализов</li>
+                            <li>Развитие профессиональных компетенций медицинского персонала</li>
+                            <li>Укрепление партнерских отношений с медицинскими учреждениями</li>
+                        </ul>
+                    </div>
+                    <div class="image-block">
+                        <img src="images/about-lab-3.jpg" alt="Наши цели">
+                    </div>
                 </div>
             </section>
         </div>

@@ -91,7 +91,7 @@ main {
 .section-content {
     display: flex;
     width: 100%;
-    height: 500px; /* Фиксированная высота для всех секций */
+    height: 700px; /* Увеличиваем высоту секций */
 }
 
 .section-content.reverse {
@@ -99,31 +99,29 @@ main {
 }
 
 .text-block {
-    width: 50%;
-    padding: 60px 80px;
+    width: 50%; /* Ровно половина */
+    padding: 80px;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    background: inherit; /* Наследует цвет фона от секции */
+    background: inherit;
 }
 
 .text-block h2 {
-    font-size: 36px;
+    font-size: 42px; /* Увеличиваем размер заголовка */
     color: #333;
-    margin-bottom: 20px;
-    line-height: 1.2;
-}
-
-.text-block p {
-    font-size: 16px;
-    line-height: 1.6;
-    color: #666;
     margin-bottom: 30px;
 }
 
+.text-block p {
+    font-size: 18px; /* Увеличиваем размер текста */
+    line-height: 1.7;
+    color: #666;
+    margin-bottom: 40px;
+}
+
 .image-block {
-    width: 50%;
-    overflow: hidden;
+    width: 50%; /* Ровно половина */
 }
 
 .image-block img {
@@ -151,34 +149,34 @@ main {
 
 @media (max-width: 1024px) {
     .section-content {
-        flex-direction: column;
         height: auto;
     }
 
-    .section-content.reverse {
-        flex-direction: column;
+    .text-block {
+        padding: 60px 40px;
     }
 
-    .text-block, .image-block {
-        width: 100%;
+    .advantages-list {
+        flex-wrap: wrap;
+        gap: 40px;
+    }
+
+    .advantage-item {
+        flex: 0 0 calc(50% - 20px);
+    }
+}
+
+@media (max-width: 768px) {
+    .advantage-item {
+        flex: 0 0 100%;
     }
 
     .text-block {
         padding: 40px 20px;
     }
 
-    .image-block {
-        height: 400px;
-    }
-}
-
-@media (max-width: 768px) {
-    .image-block {
-        height: 300px;
-    }
-
-    .text-block {
-        padding: 30px 20px;
+    .text-block h2 {
+        font-size: 32px;
     }
 }
 
@@ -1125,4 +1123,71 @@ footer {
     .contact-info-grid {
         grid-template-columns: 1fr;
     }
+}
+
+/* Стили для секции преимуществ */
+.advantages {
+    background: #ffffff;
+    padding: 100px 0;
+}
+
+.advantages-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 20px;
+    text-align: center;
+}
+
+.advantages h2 {
+    font-size: 42px;
+    color: #333;
+    margin-bottom: 60px;
+}
+
+.advantages-list {
+    display: flex;
+    justify-content: space-between;
+    gap: 30px;
+    margin-top: 50px;
+}
+
+.advantage-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.advantage-circle {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: #FFF5F5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 25px;
+    transition: transform 0.3s ease;
+}
+
+.advantage-circle:hover {
+    transform: translateY(-10px);
+}
+
+.advantage-circle i {
+    font-size: 40px;
+    color: #FF6E6E;
+}
+
+.advantage-item h3 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.advantage-item p {
+    font-size: 16px;
+    color: #666;
+    line-height: 1.5;
 }
