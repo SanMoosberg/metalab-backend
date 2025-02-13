@@ -1,69 +1,56 @@
 const Home = {
     template: `
-<div class="home-container">
-    <section class="hero-block">
-        <div class="hero-block__text">
-            <h2>Инновационные лабораторные решения</h2>
-            <p>Мы предлагаем передовое оборудование и технологии для вашей лаборатории. Наши решения помогают оптимизировать рабочие процессы и повысить эффективность исследований.</p>
-        </div>
-        <div class="hero-block__image">
-            <img src="images/lab-automation.jpg" alt="Лабораторное оборудование" />
-        </div>
-    </section>
+        <div class="home-container">
+            <section class="content-section beige">
+                <div class="section-content">
+                    <div class="text-block">
+                        <h2>Современная лабораторная диагностика</h2>
+                        <p>MetaLaboratory – это инновационный медицинский центр, оснащенный передовым оборудованием для проведения всех видов лабораторных исследований. Мы предлагаем широкий спектр анализов и диагностических процедур с максимальной точностью результатов.</p>
+                        <button class="primary-button">Узнать больше</button>
+                    </div>
+                    <div class="image-block">
+                        <img src="images/lab1.jpg" alt="Современная лаборатория">
+                    </div>
+                </div>
+            </section>
 
-    <section class="hero-block">
-        <div class="hero-block__image">
-            <img src="images/lab-equipment.jpg" alt="Современные технологии" />
-        </div>
-        <div class="hero-block__text">
-            <h2>Современное оснащение</h2>
-            <p>Мы используем только современное оборудование от ведущих мировых производителей. Все приборы регулярно проходят поверку и техническое обслуживание, что гарантирует точность и надежность результатов исследований.</p>
-        </div>
-    </section>
+            <section class="content-section white">
+                <div class="section-content reverse">
+                    <div class="text-block">
+                        <h2>Широкий спектр исследований</h2>
+                        <p>В нашей лаборатории вы можете пройти более 1000 видов различных исследований: от простого анализа крови до сложных генетических тестов. Мы используем современные методики и оборудование экспертного класса для обеспечения максимальной точности результатов.</p>
+                        <button class="primary-button">Смотреть каталог</button>
+                    </div>
+                    <div class="image-block">
+                        <img src="images/lab2.jpg" alt="Лабораторные исследования">
+                    </div>
+                </div>
+            </section>
 
-    <section class="hero-block">
-        <div class="hero-block__text">
-            <h3>Гарантия качества</h3>
-            <p>Наша лаборатория имеет все необходимые лицензии и сертификаты. Мы регулярно участвуем в программах внешнего контроля качества и постоянно совершенствуем наши методики.</p>
-            <ul class="quality-list">
-                <li>Лицензия на медицинскую деятельность</li>
-                <li>Сертификаты ISO 9001:2015</li>
-                <li>Участие в международных программах контроля качества</li>
-                <li>Регулярное повышение квалификации персонала</li>
-            </ul>
-        </div>
-        <div class="hero-block__image">
-            <img src="images/lab-quality.jpg" alt="Гарантия качества" />
-        </div>
-    </section>
-    
-    <section class="advantages-section">
-        <h3>Наши преимущества</h3>
-        <div class="advantages-grid">
-            <div class="advantage-card">
-                <div class="advantage-icon">
-                    <img src="images/icon-quality.svg" alt="Качество">
+            <section class="content-section light-pink">
+                <div class="section-content">
+                    <div class="text-block">
+                        <h2>Экспертная команда специалистов</h2>
+                        <p>Наши врачи и лаборанты – профессионалы высочайшего класса с многолетним опытом работы. Мы постоянно повышаем квалификацию и внедряем новейшие методики исследований для обеспечения максимальной точности результатов.</p>
+                    </div>
+                    <div class="image-block">
+                        <img src="images/lab3.jpg" alt="Команда специалистов">
+                    </div>
                 </div>
-                <h4>Высокая точность</h4>
-                <p>Современное оборудование и строгий контроль качества</p>
-            </div>
-            <div class="advantage-card">
-                <div class="advantage-icon">
-                    <img src="images/icon-speed.svg" alt="Скорость">
+            </section>
+
+            <section class="content-section white">
+                <div class="section-content reverse">
+                    <div class="text-block">
+                        <h2>Комфорт и безопасность</h2>
+                        <p>Мы создали максимально комфортные условия для наших пациентов. Современное оборудование, уютные помещения и внимательный персонал сделают ваше посещение приятным и безопасным. Результаты исследований доступны в личном кабинете сразу после готовности.</p>
+                    </div>
+                    <div class="image-block">
+                        <img src="images/lab4.jpg" alt="Комфортные условия">
+                    </div>
                 </div>
-                <h4>Быстрые результаты</h4>
-                <p>Выдача результатов в кратчайшие сроки</p>
-            </div>
-            <div class="advantage-card">
-                <div class="advantage-icon">
-                    <img src="images/icon-experts.svg" alt="Специалисты">
-                </div>
-                <h4>Опытные специалисты</h4>
-                <p>Команда квалифицированных врачей и лаборантов</p>
-            </div>
+            </section>
         </div>
-    </section>
-</div>
     `
 };
 
@@ -220,6 +207,86 @@ const Contacts = {
     template: `
         <div class="contacts-container">
             <div class="contacts-grid">
+                <div class="info-grid">
+                    <div class="info-card">
+                        <h3>Адрес</h3>
+                        <div class="address-content">
+                            <p>г. Москва, ул. Академика Королева, 12</p>
+                            <p>Медицинский центр "MetaLaboratory"</p>
+                            <p class="metro"><i class="fas fa-subway"></i> 5 минут от м. ВДНХ</p>
+                            <div class="transport-info">
+                                <div class="transport-item">
+                                    <i class="fas fa-walking"></i>
+                                    <span>От метро ВДНХ: 5-7 минут пешком по аллее Космонавтов, мимо фонтана "Дружба народов"</span>
+                                </div>
+                                <div class="transport-item">
+                                    <i class="fas fa-bus"></i>
+                                    <span>Автобусы: 15, 24, 85 (остановка "Улица Академика Королева")</span>
+                                </div>
+                                <div class="transport-item">
+                                    <i class="fas fa-car"></i>
+                                    <span>Личный транспорт: бесплатная парковка на территории центра</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="info-card">
+                        <h3>Телефоны</h3>
+                        <div class="contact-content">
+                            <div class="contact-item">
+                                <a href="tel:+74951234567">+7 (495) 123-45-67</a>
+                                <span>Общие вопросы и консультации</span>
+                                <p class="contact-details">Ответим на все вопросы о наших услугах, ценах и акциях. Поможем выбрать удобное время для посещения.</p>
+                            </div>
+                            <div class="contact-item">
+                                <a href="tel:+74951234568">+7 (495) 123-45-68</a>
+                                <span>Запись на анализы и исследования</span>
+                                <p class="contact-details">Запись на все виды лабораторных исследований, включая срочные анализы и комплексную диагностику.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="info-card">
+                        <h3>Email</h3>
+                        <div class="contact-content">
+                            <div class="contact-item">
+                                <a href="mailto:info@metalab.ru">info@metalab.ru</a>
+                                <span>Общие вопросы и информация</span>
+                                <p class="contact-details">Отправьте нам email для получения подробной информации об услугах, корпоративном обслуживании или сотрудничестве.</p>
+                            </div>
+                            <div class="contact-item">
+                                <a href="mailto:support@metalab.ru">support@metalab.ru</a>
+                                <span>Техническая поддержка</span>
+                                <p class="contact-details">Решение вопросов с личным кабинетом, получением результатов онлайн и работой сайта.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="info-card">
+                        <h3>Режим работы</h3>
+                        <div class="schedule-content">
+                            <div class="schedule-item">
+                                <span class="day">Пн-Пт:</span>
+                                <span class="time">8:00 - 20:00</span>
+                            </div>
+                            <div class="schedule-item">
+                                <span class="day">Сб:</span>
+                                <span class="time">9:00 - 18:00</span>
+                            </div>
+                            <div class="schedule-item">
+                                <span class="day">Вс:</span>
+                                <span class="time">9:00 - 16:00</span>
+                            </div>
+                            <div class="schedule-note">
+                                <p>Забор анализов: ежедневно с 8:00 до 11:00</p>
+                                <p>Срочные анализы: в течение всего рабочего дня</p>
+                                <p>Выдача результатов: круглосуточно в личном кабинете</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="map-section">
                     <iframe 
                         src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2092.347992602746!2d26.678260577264577!3d58.37066788738478!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x46eb3708ae89c8c5%3A0x9ee86db8e6696d74!2sArhitekti%20tn%2010%2C%2050407%20Tartu!5e0!3m2!1set!2see!4v1739274113884!5m2!1set!2see" 
@@ -227,140 +294,6 @@ const Contacts = {
                         loading="lazy" 
                         referrerpolicy="no-referrer-when-downgrade">
                     </iframe>
-                </div>
-                <div class="info-section">
-                    <div class="info-block">
-                        <h3>Адрес и как добраться</h3>
-                        <div class="address-main">
-                            <p>г. Москва, ул. Академика Королева, 12</p>
-                            <p>Медицинский центр "MetaLaboratory"</p>
-                            <p class="metro">5 минут от м. ВДНХ</p>
-                        </div>
-                        <div class="transport-info">
-                            <div class="transport-item">
-                                <i class="fas fa-walking"></i>
-                                <span>Пешком от метро: 5-7 минут по аллее Космонавтов</span>
-                            </div>
-                            <div class="transport-item">
-                                <i class="fas fa-bus"></i>
-                                <span>Автобусы: 15, 24, 85 (ост. "Улица Академика Королева")</span>
-                            </div>
-                            <div class="transport-item">
-                                <i class="fas fa-bus-alt"></i>
-                                <span>Троллейбусы: 13, 69 (ост. "ВДНХ-Южная")</span>
-                            </div>
-                            <div class="transport-item">
-                                <i class="fas fa-car"></i>
-                                <span>Парковка: бесплатная на территории центра</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="contact-info-grid">
-                <div class="info-card">
-                    <h3>Телефоны</h3>
-                    <div class="contact-item">
-                        <a href="tel:+74951234567">+7 (495) 123-45-67</a>
-                        <span>Общие вопросы</span>
-                        <p class="work-hours">Пн-Пт: 8:00 - 20:00</p>
-                    </div>
-                    <div class="contact-item">
-                        <a href="tel:+74951234568">+7 (495) 123-45-68</a>
-                        <span>Запись на анализы</span>
-                        <p class="work-hours">Пн-Вс: 8:00 - 20:00</p>
-                    </div>
-                    <div class="contact-item">
-                        <a href="tel:+74951234569">+7 (495) 123-45-69</a>
-                        <span>Экстренная связь</span>
-                        <p class="work-hours">Круглосуточно</p>
-                    </div>
-                </div>
-
-                <div class="info-card">
-                    <h3>Режим работы</h3>
-                    <div class="schedule-grid">
-                        <div class="schedule-item">
-                            <span class="day">Понедельник</span>
-                            <span class="time">8:00 - 20:00</span>
-                        </div>
-                        <div class="schedule-item">
-                            <span class="day">Вторник</span>
-                            <span class="time">8:00 - 20:00</span>
-                        </div>
-                        <div class="schedule-item">
-                            <span class="day">Среда</span>
-                            <span class="time">8:00 - 20:00</span>
-                        </div>
-                        <div class="schedule-item">
-                            <span class="day">Четверг</span>
-                            <span class="time">8:00 - 20:00</span>
-                        </div>
-                        <div class="schedule-item">
-                            <span class="day">Пятница</span>
-                            <span class="time">8:00 - 20:00</span>
-                        </div>
-                        <div class="schedule-item weekend">
-                            <span class="day">Суббота</span>
-                            <span class="time">9:00 - 18:00</span>
-                        </div>
-                        <div class="schedule-item weekend">
-                            <span class="day">Воскресенье</span>
-                            <span class="time">9:00 - 16:00</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="info-card">
-                    <h3>Email</h3>
-                    <div class="contact-item">
-                        <a href="mailto:info@metalab.ru">info@metalab.ru</a>
-                        <span>Общие вопросы</span>
-                    </div>
-                    <div class="contact-item">
-                        <a href="mailto:support@metalab.ru">support@metalab.ru</a>
-                        <span>Техническая поддержка</span>
-                    </div>
-                    <div class="social-links">
-                        <h4>Мы в социальных сетях:</h4>
-                        <div class="social-grid">
-                            <a href="#" class="social-item">
-                                <i class="fab fa-telegram"></i>
-                                <span>Telegram</span>
-                            </a>
-                            <a href="#" class="social-item">
-                                <i class="fab fa-vk"></i>
-                                <span>VKontakte</span>
-                            </a>
-                            <a href="#" class="social-item">
-                                <i class="fab fa-whatsapp"></i>
-                                <span>WhatsApp</span>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="info-card">
-                    <h3>Дополнительно</h3>
-                    <div class="features-list">
-                        <div class="feature-item">
-                            <i class="fas fa-wheelchair"></i>
-                            <span>Доступная среда</span>
-                        </div>
-                        <div class="feature-item">
-                            <i class="fas fa-wifi"></i>
-                            <span>Бесплатный Wi-Fi</span>
-                        </div>
-                        <div class="feature-item">
-                            <i class="fas fa-coffee"></i>
-                            <span>Зона ожидания с кофе</span>
-                        </div>
-                        <div class="feature-item">
-                            <i class="fas fa-credit-card"></i>
-                            <span>Оплата картой</span>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>

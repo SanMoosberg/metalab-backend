@@ -18,10 +18,9 @@ body {
 header {
     background-color: #ffffff;
     padding: 15px 40px;
-    position: sticky;
     top: 0;
     z-index: 1000;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -70,50 +69,117 @@ main {
 
 /* Обновленные стили для основного контента */
 .home-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 40px 20px;
+    width: 100%;
 }
 
-.hero-block {
+.content-section {
+    width: 100%;
+}
+
+.content-section.beige {
+    background-color: #FAF8F6;
+}
+
+.content-section.white {
+    background-color: #FFFFFF;
+}
+
+.content-section.light-pink {
+    background-color: #FFF5F5;
+}
+
+.section-content {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 40px;
-    margin-bottom: 80px;
+    width: 100%;
+    height: 500px; /* Фиксированная высота для всех секций */
 }
 
-.hero-block.reverse {
+.section-content.reverse {
     flex-direction: row-reverse;
 }
 
-.hero-block__text {
-    flex: 0 0 45%;
-    padding-right: 20px;
+.text-block {
+    width: 50%;
+    padding: 60px 80px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background: inherit; /* Наследует цвет фона от секции */
 }
 
-.hero-block__text h2 {
-    font-size: 32px;
-    margin-bottom: 20px;
+.text-block h2 {
+    font-size: 36px;
     color: #333;
+    margin-bottom: 20px;
+    line-height: 1.2;
 }
 
-.hero-block__text p {
-    font-size: 18px;
+.text-block p {
+    font-size: 16px;
     line-height: 1.6;
     color: #666;
+    margin-bottom: 30px;
 }
 
-.hero-block__image {
-    flex: 0 0 50%;
+.image-block {
+    width: 50%;
+    overflow: hidden;
 }
 
-.hero-block__image img {
+.image-block img {
     width: 100%;
-    height: 500px;
+    height: 100%;
     object-fit: cover;
+}
+
+.primary-button {
+    align-self: flex-start; /* Кнопка по ширине контента */
+    background-color: #FF6E6E;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    font-size: 16px;
     border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.primary-button:hover {
+    background-color: #FF5555;
+    transform: translateY(-2px);
+}
+
+@media (max-width: 1024px) {
+    .section-content {
+        flex-direction: column;
+        height: auto;
+    }
+
+    .section-content.reverse {
+        flex-direction: column;
+    }
+
+    .text-block, .image-block {
+        width: 100%;
+    }
+
+    .text-block {
+        padding: 40px 20px;
+    }
+
+    .image-block {
+        height: 400px;
+    }
+}
+
+@media (max-width: 768px) {
+    .image-block {
+        height: 300px;
+    }
+
+    .text-block {
+        padding: 30px 20px;
+    }
 }
 
 /* КНОПКИ И ССЫЛКИ */
@@ -799,19 +865,33 @@ footer {
 /* Стили для страницы контактов */
 .contacts-container {
     width: 100%;
+    height: calc(100vh - 130px);
     padding: 20px;
-    background: #f8f9fa;
+    background: #FAF8F6;
+    display: flex;
+    align-items: center;
 }
 
 .contacts-grid {
     display: grid;
-    grid-template-columns: 2fr 1fr;
+    grid-template-columns: 1fr 1fr;
     gap: 20px;
-    margin-bottom: 20px;
+    width: 100%;
+    max-width: 1800px;
+    margin: 0 auto;
+    height: 100%;
+    max-height: 800px;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 20px;
 }
 
 .map-section {
-    height: 500px;
+    height: 100%;
     border-radius: 8px;
     overflow: hidden;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
@@ -823,81 +903,113 @@ footer {
     border: none;
 }
 
-.info-section {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
-
-.info-block {
-    padding: 20px;
-    background: white;
-    border-radius: 8px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    height: 100%;
-}
-
-.contact-info-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 20px;
-}
-
 .info-card {
     background: white;
-    padding: 25px;
+    padding: 20px;
     border-radius: 8px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
 }
 
-.features-list {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 15px;
+.info-card h3 {
+    color: #333;
+    font-size: 18px;
+    margin-bottom: 15px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #FF6E6E;
 }
 
-.feature-item {
+.address-content p {
+    margin: 5px 0;
+    color: #666;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+.metro {
+    color: #FF6E6E !important;
+    font-weight: 500;
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 10px;
-    background: #f8f9fa;
-    border-radius: 6px;
+    gap: 5px;
 }
 
-.feature-item i {
-    color: #FF6E6E;
-    font-size: 20px;
-}
-
-.feature-item span {
+.transport-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 10px;
+    color: #666;
     font-size: 14px;
+}
+
+.transport-item i {
+    color: #FF6E6E;
+    font-size: 14px;
+}
+
+.contact-content {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.contact-item a {
+    color: #FF6E6E;
+    font-size: 16px;
+    text-decoration: none;
+    display: block;
+    margin-bottom: 2px;
+}
+
+.contact-item span {
+    font-size: 13px;
     color: #666;
 }
 
-@media (max-width: 1400px) {
-    .contact-info-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
+.schedule-content {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
 }
 
-@media (max-width: 1024px) {
+.schedule-item {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+}
+
+.schedule-item .day {
+    color: #333;
+}
+
+.schedule-item .time {
+    color: #666;
+}
+
+@media (max-width: 1200px) {
     .contacts-grid {
         grid-template-columns: 1fr;
     }
-    
+
+    .info-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
     .map-section {
         height: 400px;
     }
 }
 
 @media (max-width: 768px) {
-    .contact-info-grid {
-        grid-template-columns: 1fr;
-    }
-    
     .contacts-container {
+        height: auto;
         padding: 10px;
+    }
+
+    .info-grid {
+        grid-template-columns: 1fr;
     }
 }
 
