@@ -798,147 +798,106 @@ footer {
 
 /* Стили для страницы контактов */
 .contacts-container {
-    max-width: 100%;
-    height: 100vh;
-    margin: 0 auto;
-    padding: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    width: 100%;
+    padding: 20px;
+    background: #f8f9fa;
 }
 
 .contacts-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 40px;
-    width: 100%;
-    max-height: 800px;
-}
-
-.contact-info {
-    display: flex;
-    flex-direction: column;
+    grid-template-columns: 2fr 1fr;
     gap: 20px;
-    height: 100%;
+    margin-bottom: 20px;
 }
 
-.info-block {
-    background: white;
-    padding: 25px;
-    border-radius: 12px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease;
-}
-
-.info-block.main-info {
-    flex-grow: 1;
-}
-
-.info-block.additional-info {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-    padding: 0;
-    background: none;
-    box-shadow: none;
-}
-
-.info-block.additional-info > div {
-    background: white;
-    padding: 25px;
-    border-radius: 12px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-}
-
-.info-block:hover {
-    transform: translateY(-2px);
-}
-
-.info-block h3 {
-    color: #333;
-    font-size: 20px;
-    margin-bottom: 15px;
-    padding-bottom: 10px;
-    border-bottom: 2px solid #FF6E6E;
-}
-
-.info-block p {
-    margin: 8px 0;
-    font-size: 16px;
-    color: #333;
-    line-height: 1.5;
-}
-
-.transport-details {
-    margin-top: 15px;
-    padding-top: 15px;
-    border-top: 1px solid #eee;
-}
-
-.transport-details p {
-    margin: 5px 0;
-    color: #666;
-    font-size: 14px;
-}
-
-.info-block a {
-    color: #FF6E6E;
-    text-decoration: none;
-    transition: color 0.3s ease;
-}
-
-.info-block a:hover {
-    color: #ff4e4e;
-}
-
-.info-detail {
-    display: block;
-    font-size: 14px;
-    color: #666;
-    margin-top: 4px;
-}
-
-.contact-map {
-    width: 100%;
-    aspect-ratio: 1/1;
-    border-radius: 12px;
+.map-section {
+    height: 500px;
+    border-radius: 8px;
     overflow: hidden;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
-.contact-map iframe {
+.map-section iframe {
     width: 100%;
     height: 100%;
     border: none;
 }
 
-/* Медиа-запросы */
-@media (max-width: 1200px) {
-    .contacts-container {
-        padding: 20px;
-        height: auto;
-    }
+.info-section {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
 
+.info-block {
+    padding: 20px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    height: 100%;
+}
+
+.contact-info-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+}
+
+.info-card {
+    background: white;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.features-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+}
+
+.feature-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    background: #f8f9fa;
+    border-radius: 6px;
+}
+
+.feature-item i {
+    color: #FF6E6E;
+    font-size: 20px;
+}
+
+.feature-item span {
+    font-size: 14px;
+    color: #666;
+}
+
+@media (max-width: 1400px) {
+    .contact-info-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 1024px) {
     .contacts-grid {
-        max-height: none;
+        grid-template-columns: 1fr;
+    }
+    
+    .map-section {
+        height: 400px;
     }
 }
 
 @media (max-width: 768px) {
-    .contacts-grid {
+    .contact-info-grid {
         grid-template-columns: 1fr;
     }
-
-    .info-block.additional-info {
-        grid-template-columns: 1fr;
-    }
-
-    .contact-map {
-        aspect-ratio: 16/9;
-    }
-
-    .info-block {
-        padding: 20px;
+    
+    .contacts-container {
+        padding: 10px;
     }
 }
 
@@ -1028,4 +987,30 @@ footer {
 
 .advantage-card:hover {
     transform: translateY(-5px);
+}
+
+/* Обновляем только сетку для нижних карточек */
+.contact-info-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+/* Медиа-запросы */
+@media (max-width: 1400px) {
+    .contact-info-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 1024px) {
+    .contact-info-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .contact-info-grid {
+        grid-template-columns: 1fr;
+    }
 }

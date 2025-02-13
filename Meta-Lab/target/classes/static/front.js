@@ -220,61 +220,147 @@ const Contacts = {
     template: `
         <div class="contacts-container">
             <div class="contacts-grid">
-                <div class="contact-info">
-                    <div class="info-block main-info">
-                        <h3>Адрес</h3>
-                        <p>г. Москва, ул. Академика Королева, 12</p>
-                        <p>Медицинский центр "MetaLaboratory"</p>
-                        <p class="info-detail">5 минут от м. ВДНХ</p>
-                        <div class="transport-details">
-                            <p>Как добраться:</p>
-                            <p>• От метро ВДНХ: пешком 5 минут по аллее Космонавтов</p>
-                            <p>• Автобусы: 15, 24, 85 (остановка "Улица Академика Королева")</p>
-                            <p>• Троллейбусы: 13, 69 (остановка "ВДНХ-Южная")</p>
-                        </div>
-                    </div>
-                    
-                    <div class="info-block additional-info">
-                        <div>
-                            <h3>Телефоны</h3>
-                            <p>
-                                <a href="tel:+74951234567">+7 (495) 123-45-67</a>
-                                <span class="info-detail">Общие вопросы</span>
-                            </p>
-                            <p>
-                                <a href="tel:+74951234568">+7 (495) 123-45-68</a>
-                                <span class="info-detail">Запись на анализы</span>
-                            </p>
-                        </div>
-                        
-                        <div>
-                            <h3>Режим работы</h3>
-                            <p>Пн-Пт: 8:00 - 20:00</p>
-                            <p>Сб: 9:00 - 18:00</p>
-                            <p>Вс: 9:00 - 16:00</p>
-                        </div>
-                        
-                        <div>
-                            <h3>Email</h3>
-                            <p>
-                                <a href="mailto:info@metalab.ru">info@metalab.ru</a>
-                                <span class="info-detail">Общие вопросы</span>
-                            </p>
-                            <p>
-                                <a href="mailto:support@metalab.ru">support@metalab.ru</a>
-                                <span class="info-detail">Техническая поддержка</span>
-                            </p>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="contact-map">
+                <div class="map-section">
                     <iframe 
                         src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2092.347992602746!2d26.678260577264577!3d58.37066788738478!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x46eb3708ae89c8c5%3A0x9ee86db8e6696d74!2sArhitekti%20tn%2010%2C%2050407%20Tartu!5e0!3m2!1set!2see!4v1739274113884!5m2!1set!2see" 
                         allowfullscreen="" 
                         loading="lazy" 
                         referrerpolicy="no-referrer-when-downgrade">
                     </iframe>
+                </div>
+                <div class="info-section">
+                    <div class="info-block">
+                        <h3>Адрес и как добраться</h3>
+                        <div class="address-main">
+                            <p>г. Москва, ул. Академика Королева, 12</p>
+                            <p>Медицинский центр "MetaLaboratory"</p>
+                            <p class="metro">5 минут от м. ВДНХ</p>
+                        </div>
+                        <div class="transport-info">
+                            <div class="transport-item">
+                                <i class="fas fa-walking"></i>
+                                <span>Пешком от метро: 5-7 минут по аллее Космонавтов</span>
+                            </div>
+                            <div class="transport-item">
+                                <i class="fas fa-bus"></i>
+                                <span>Автобусы: 15, 24, 85 (ост. "Улица Академика Королева")</span>
+                            </div>
+                            <div class="transport-item">
+                                <i class="fas fa-bus-alt"></i>
+                                <span>Троллейбусы: 13, 69 (ост. "ВДНХ-Южная")</span>
+                            </div>
+                            <div class="transport-item">
+                                <i class="fas fa-car"></i>
+                                <span>Парковка: бесплатная на территории центра</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="contact-info-grid">
+                <div class="info-card">
+                    <h3>Телефоны</h3>
+                    <div class="contact-item">
+                        <a href="tel:+74951234567">+7 (495) 123-45-67</a>
+                        <span>Общие вопросы</span>
+                        <p class="work-hours">Пн-Пт: 8:00 - 20:00</p>
+                    </div>
+                    <div class="contact-item">
+                        <a href="tel:+74951234568">+7 (495) 123-45-68</a>
+                        <span>Запись на анализы</span>
+                        <p class="work-hours">Пн-Вс: 8:00 - 20:00</p>
+                    </div>
+                    <div class="contact-item">
+                        <a href="tel:+74951234569">+7 (495) 123-45-69</a>
+                        <span>Экстренная связь</span>
+                        <p class="work-hours">Круглосуточно</p>
+                    </div>
+                </div>
+
+                <div class="info-card">
+                    <h3>Режим работы</h3>
+                    <div class="schedule-grid">
+                        <div class="schedule-item">
+                            <span class="day">Понедельник</span>
+                            <span class="time">8:00 - 20:00</span>
+                        </div>
+                        <div class="schedule-item">
+                            <span class="day">Вторник</span>
+                            <span class="time">8:00 - 20:00</span>
+                        </div>
+                        <div class="schedule-item">
+                            <span class="day">Среда</span>
+                            <span class="time">8:00 - 20:00</span>
+                        </div>
+                        <div class="schedule-item">
+                            <span class="day">Четверг</span>
+                            <span class="time">8:00 - 20:00</span>
+                        </div>
+                        <div class="schedule-item">
+                            <span class="day">Пятница</span>
+                            <span class="time">8:00 - 20:00</span>
+                        </div>
+                        <div class="schedule-item weekend">
+                            <span class="day">Суббота</span>
+                            <span class="time">9:00 - 18:00</span>
+                        </div>
+                        <div class="schedule-item weekend">
+                            <span class="day">Воскресенье</span>
+                            <span class="time">9:00 - 16:00</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info-card">
+                    <h3>Email</h3>
+                    <div class="contact-item">
+                        <a href="mailto:info@metalab.ru">info@metalab.ru</a>
+                        <span>Общие вопросы</span>
+                    </div>
+                    <div class="contact-item">
+                        <a href="mailto:support@metalab.ru">support@metalab.ru</a>
+                        <span>Техническая поддержка</span>
+                    </div>
+                    <div class="social-links">
+                        <h4>Мы в социальных сетях:</h4>
+                        <div class="social-grid">
+                            <a href="#" class="social-item">
+                                <i class="fab fa-telegram"></i>
+                                <span>Telegram</span>
+                            </a>
+                            <a href="#" class="social-item">
+                                <i class="fab fa-vk"></i>
+                                <span>VKontakte</span>
+                            </a>
+                            <a href="#" class="social-item">
+                                <i class="fab fa-whatsapp"></i>
+                                <span>WhatsApp</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info-card">
+                    <h3>Дополнительно</h3>
+                    <div class="features-list">
+                        <div class="feature-item">
+                            <i class="fas fa-wheelchair"></i>
+                            <span>Доступная среда</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-wifi"></i>
+                            <span>Бесплатный Wi-Fi</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-coffee"></i>
+                            <span>Зона ожидания с кофе</span>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-credit-card"></i>
+                            <span>Оплата картой</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
