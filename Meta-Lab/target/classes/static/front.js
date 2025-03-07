@@ -2,27 +2,27 @@ const Home = {
     template: `
         <div class="home-container">
             <section class="content-section beige">
-                <div class="section-content">
+                <div class="section-content reverse">
+                    <div class="image-block">
+                        <img src="images/ab1.jpg" alt="Современная лаборатория">
+                    </div>
                     <div class="text-block">
                         <h2>Современная лабораторная диагностика</h2>
                         <p>MetaLaboratory – это инновационный медицинский центр, оснащенный передовым оборудованием для проведения всех видов лабораторных исследований. Мы предлагаем широкий спектр анализов и диагностических процедур с максимальной точностью результатов.</p>
-                        <button class="primary-button">Узнать больше</button>
-                    </div>
-                    <div class="image-block">
-                        <img src="images/lab1.jpg" alt="Современная лаборатория">
+                        <router-link to="/about" class="primary-button">Узнать больше</router-link>
                     </div>
                 </div>
             </section>
 
             <section class="content-section white">
-                <div class="section-content reverse">
+                <div class="section-content">
+                    <div class="image-block">
+                        <img src="images/ab2.jpg" alt="Лабораторные исследования">
+                    </div>
                     <div class="text-block">
                         <h2>Широкий спектр исследований</h2>
                         <p>В нашей лаборатории вы можете пройти более 1000 видов различных исследований: от простого анализа крови до сложных генетических тестов. Мы используем современные методики и оборудование экспертного класса для обеспечения максимальной точности результатов.</p>
-                        <button class="primary-button">Смотреть каталог</button>
-                    </div>
-                    <div class="image-block">
-                        <img src="images/lab2.jpg" alt="Лабораторные исследования">
+                        <router-link to="/catalog" class="primary-button">Смотреть каталог</router-link>
                     </div>
                 </div>
             </section>
@@ -64,31 +64,32 @@ const Home = {
             </section>
 
             <section class="content-section light-pink">
-                <div class="section-content">
+                <div class="section-content reverse">
+                    <div class="image-block">
+                        <img src="images/ab3.jpg" alt="Команда специалистов">
+                    </div>
                     <div class="text-block">
                         <h2>Экспертная команда специалистов</h2>
                         <p>Наши врачи и лаборанты – профессионалы высочайшего класса с многолетним опытом работы. Мы постоянно повышаем квалификацию и внедряем новейшие методики исследований для обеспечения максимальной точности результатов.</p>
-                    </div>
-                    <div class="image-block">
-                        <img src="images/lab3.jpg" alt="Команда специалистов">
                     </div>
                 </div>
             </section>
 
             <section class="content-section white">
-                <div class="section-content reverse">
+                <div class="section-content">
+                    <div class="image-block">
+                        <img src="images/ab4.jpg" alt="Комфортные условия">
+                    </div>
                     <div class="text-block">
                         <h2>Комфорт и безопасность</h2>
                         <p>Мы создали максимально комфортные условия для наших пациентов. Современное оборудование, уютные помещения и внимательный персонал сделают ваше посещение приятным и безопасным. Результаты исследований доступны в личном кабинете сразу после готовности.</p>
-                    </div>
-                    <div class="image-block">
-                        <img src="images/lab4.jpg" alt="Комфортные условия">
                     </div>
                 </div>
             </section>
         </div>
     `
 };
+
 
 const About = {
     template: `
@@ -100,7 +101,7 @@ const About = {
                         <p>MetaLaboratory начала свою работу в 2010 году как небольшая частная лаборатория. За прошедшие годы мы выросли в современный диагностический центр, оснащенный передовым оборудованием и укомплектованный командой высококвалифицированных специалистов.</p>
                     </div>
                     <div class="image-block">
-                        <img src="images/about-lab-1.jpg" alt="История лаборатории">
+                        <img src="images/his1.jpg" alt="История лаборатории">
                     </div>
                 </div>
             </section>
@@ -118,7 +119,7 @@ const About = {
                         </ul>
                     </div>
                     <div class="image-block">
-                        <img src="images/about-lab-2.jpg" alt="Миссия">
+                        <img src="images/his2.jpg" alt="Миссия">
                     </div>
                 </div>
             </section>
@@ -136,7 +137,7 @@ const About = {
                         </ul>
                     </div>
                     <div class="image-block">
-                        <img src="images/about-lab-3.jpg" alt="Наши цели">
+                        <img src="images/his3.jpg" alt="Наши цели">
                     </div>
                 </div>
             </section>
@@ -147,102 +148,222 @@ const About = {
 const Catalog = {
     data() {
         return {
+            client: null,
             products: [],
-            newProduct: { name: "", description: "", price: 0 },
             isAdmin: false,
+            isAuthenticated: false,
+            isEditing: false,
+            newProduct: {
+                name: "",
+                description: "",
+                price: 0
+            },
+            showNotification: false,
+            notificationText: '',
+            notificationType: ''
         };
     },
     async created() {
+        // Получаем список анализов
         const response = await axios.get("/api/products");
         this.products = response.data;
 
+        // Проверяем авторизацию и права администратора
         const token = localStorage.getItem("jwtToken");
         if (token) {
+            this.isAuthenticated = true;
             const profileResponse = await axios.get("/api/profile", {
                 headers: { Authorization: `Bearer ${token}` },
             });
+            this.client = profileResponse.data;
             this.isAdmin = profileResponse.data.role === "ADMIN";
         }
     },
     methods: {
-        async addProduct() {
+        async addOrEditProduct() {
             try {
                 const token = localStorage.getItem("jwtToken");
-                await axios.post("/api/products", this.newProduct, {
-                    headers: { Authorization: `Bearer ${token}` },
-                });
-                this.newProduct = { name: "", description: "", price: 0 };
+
+                if (this.isEditing) {
+                    // Если редактируем, отправляем PATCH-запрос
+                    await axios.patch(`/api/products/${this.newProduct.id}`, this.newProduct, {
+                        headers: {Authorization: `Bearer ${token}`},
+                    });
+                } else {
+                    // Если добавляем новый анализ, отправляем POST-запрос
+                    await axios.post("/api/products", this.newProduct, {
+                        headers: {Authorization: `Bearer ${token}`},
+                    });
+                }
+
+                // Сброс формы
+                this.newProduct = {id: null, name: "", description: "", price: 0};
+                this.isEditing = false;
+
+                // Обновляем список анализов
                 const response = await axios.get("/api/products");
                 this.products = response.data;
             } catch (error) {
-                alert("Ошибка при добавлении продукта: " + error.response.data.message);
+                alert("Ошибка: " + error.response.data.message);
             }
+        },
+        startEditing(product) {
+            // Заполняем форму данными выбранного анализа
+            this.newProduct = {...product};
+            this.isEditing = true;
+        },
+        cancelEditing() {
+            // Отмена редактирования, сброс формы
+            this.newProduct = {id: null, name: "", description: "", price: 0};
+            this.isEditing = false;
         },
         async deleteProduct(id) {
-            try {
-                const token = localStorage.getItem("jwtToken");
-                await axios.delete(`/api/products/${id}`, {
-                    headers: { Authorization: `Bearer ${token}` },
-                });
-                // Обновляем список продуктов после удаления
-                const response = await axios.get("/api/products");
-                this.products = response.data;
-            } catch (error) {
-                alert("Ошибка при удалении продукта: " + (error.response?.data?.message || error.message));
+            if (confirm("Вы уверены, что хотите удалить этот анализ?")) {
+                try {
+                    const token = localStorage.getItem("jwtToken");
+                    await axios.delete(`/api/products/${id}`, {
+                        headers: {Authorization: `Bearer ${token}`},
+                    });
+
+                    // Обновляем список анализов
+                    const response = await axios.get("/api/products");
+                    this.products = response.data;
+                } catch (error) {
+                    alert("Ошибка при удалении анализа: " + error.response.data.message);
+                }
             }
         },
-        async buyProduct(product) {
-            // Здесь будет логика покупки
-            alert(`Заказ анализа "${product.name}" оформлен`);
+        async fetchUserProfile() {
+            try {
+                const response = await axios.get('/api/profile');
+                this.client = response.data;
+                console.log("Профиль загружен:", response.data);
+            } catch (error) {
+                console.error("Ошибка загрузки профиля:", error);
+            }
+        },
+        isProductPurchased(productId) {
+            return this.client?.productList?.some(p => p.id === productId) || false;
+        },
+        async buyProduct(clientId, productId) {
+            if (this.isProductPurchased(productId)) {
+                this.showToast('Этот анализ уже приобретен', 'error');
+                return;
+            }
+
+            try {
+                const token = localStorage.getItem("jwtToken");
+
+                const response = await axios.post(`/api/clients/${clientId}/${productId}`, {}, {
+                    headers: { Authorization: `Bearer ${token}` },
+                });
+
+                // Логируем успешный ответ
+                console.log("Успешный ответ:", response);
+
+                if (response.status >= 200 && response.status < 300) {
+                    this.showToast('✓ Анализ добавлен в корзину', 'success');
+                } else {
+                    this.showToast('✗ Ошибка при добавлении анализа (неожиданный статус)', 'error');
+                }
+
+                await this.fetchUserProfile();
+            } catch (error) {
+                console.error("Ошибка при добавлении анализа:", error);
+                this.showToast('✗ Ошибка при добавлении анализа', 'error');
+            }
+        },
+        async removeOrder(clientId, productId) {
+            try {
+                const token = localStorage.getItem("jwtToken");
+                await axios.delete(`api/clients/${clientId}/${productId}`, {
+                    headers: {Authorization: `Bearer ${token}`},
+                });
+                this.showToast('✓ Анализ удален из корзины', 'success');
+                await this.fetchUserProfile();
+            } catch (error) {
+                console.error("Ошибка при удалении анализа:", error);
+                this.showToast('✗ Ошибка при удалении анализа', 'error');
+            }
+        },
+        showToast(text, type) {
+            this.notificationText = text;
+            this.notificationType = type;
+            this.showNotification = true;
+            setTimeout(() => {
+                this.showNotification = false;
+            }, 3000);
         }
     },
     template: `
-        <div class="catalog-container">
-            <div class="products-grid">
-                <div v-for="product in products" :key="product.id" class="product-card">
-                    <div class="product-content">
-                        <h3 class="product-title">{{ product.name }}</h3>
-                        <p class="product-description">{{ product.description }}</p>
-                        <div class="product-footer">
-                            <span class="product-price">{{ product.price }} ₽</span>
-                            <button class="buy-button" @click="buyProduct(product)">Заказать</button>
+<div class="catalog-container">
+    <!-- Добавляем уведомление в начало шаблона -->
+    <div v-if="showNotification" 
+         :class="['notification', notificationType]">
+        {{ notificationText }}
+    </div>
+
+    <!-- Панель администратора -->
+    <div v-if="isAdmin" class="admin-panel">
+        <h2>Панель администратора</h2>
+        <div class="add-product-form">
+            <input v-model="newProduct.name" placeholder="Название анализа">
+            <textarea v-model="newProduct.description" placeholder="Описание"></textarea>
+            <input v-model="newProduct.price" type="number" step="0.01" placeholder="Цена">
+            
+            <button @click="addOrEditProduct" class="admin-button">
+                {{ isEditing ? "Изменить анализ" : "Добавить анализ" }}
+            </button>
+            
+            <button v-if="isEditing" @click="cancelEditing" class="cancel-button">
+                Отмена
+            </button>
+        </div>
+    </div>
+
+    <!-- Список анализов -->
+    <div class="analysis-grid">
+        <div v-for="product in products" :key="product.id" class="analysis-item">
+            <div class="product-status" :class="{ 
+                show: isProductPurchased(product.id),
+                purchased: isProductPurchased(product.id) 
+            }">
+                {{ isProductPurchased(product.id) ? 'Приобретено' : '' }}
+            </div>
+            <div class="analysis-content">
+                <div class="analysis-info">
+                    <h2>{{ product.name }}</h2>
+                    <p>{{ product.description }}</p>
+                </div>
+                <div class="analysis-footer">
+                    <span class="price">{{ Number(product.price).toFixed(2) }} €</span>
+                    <div class="analysis-actions">
+                        <div v-if="isAuthenticated" class="action-buttons">
+                            <button class="buy-button" 
+                                    title="Добавить анализ"
+                                    @click="buyProduct(client.id, product.id)">
+                            </button>
+                            <button class="remove-button" 
+                                    title="Удалить анализ"
+                                    @click="removeOrder(client.id, product.id)">
+                            </button>
+                        </div>
+                        <div v-if="isAdmin" class="admin-actions">
+                            <button class="edit-button" @click="startEditing(product)">
+                                Изменить
+                            </button>
+                            <button class="delete-button" @click="deleteProduct(product.id)">
+                                Удалить
+                            </button>
                         </div>
                     </div>
-                    <button v-if="isAdmin" 
-                            class="delete-button" 
-                            @click="deleteProduct(product.id)">
-                        Удалить
-                    </button>
                 </div>
             </div>
-
-            <div v-if="isAdmin" class="admin-panel">
-                <h3>Панель администратора</h3>
-                <form @submit.prevent="addProduct" class="admin-form">
-                    <div class="form-group">
-                        <input v-model="newProduct.name" 
-                               placeholder="Название анализа" 
-                               required 
-                               class="admin-input" />
-                    </div>
-                    <div class="form-group">
-                        <textarea v-model="newProduct.description" 
-                                 placeholder="Описание" 
-                                 required 
-                                 class="admin-input"></textarea>
-                    </div>
-                    <div class="form-group">
-                        <input v-model.number="newProduct.price" 
-                               placeholder="Цена" 
-                               required 
-                               type="number" 
-                               class="admin-input" />
-                    </div>
-                    <button type="submit" class="admin-button">Добавить анализ</button>
-                </form>
-            </div>
         </div>
-    `,
+    </div>
+</div>
+
+    `
 };
 
 const Contacts = {
@@ -499,6 +620,9 @@ const Profile = {
     data() {
         return {
             user: null,
+            showNotification: false,
+            notificationText: '',
+            notificationType: ''
         };
     },
     methods: {
@@ -515,6 +639,21 @@ const Profile = {
             delete axios.defaults.headers.common['Authorization'];
             this.$root.updateAuthState();
             this.$router.push('/login');
+        },
+        showToast(text, type) {
+            this.notificationText = text;
+            this.notificationType = type;
+            this.showNotification = true;
+            setTimeout(() => {
+                this.showNotification = false;
+            }, 3000);
+        }
+    },
+    computed: {
+        calculateTotal() {
+            if (!this.user?.productList) return "0.00";
+            const total = this.user.productList.reduce((sum, product) => sum + Number(product.price), 0);
+            return total.toFixed(2);
         }
     },
     mounted() {
@@ -522,36 +661,70 @@ const Profile = {
     },
     template: `
         <div class="profile-container">
-            <div class="profile-card">
-                <div class="profile-header">
-                    <h2>Личный кабинет</h2>
-                </div>
-                
-                <div v-if="user" class="profile-content">
-                    <div class="profile-avatar">
-                        <div class="avatar-circle">
-                            {{ user.username.charAt(0).toUpperCase() }}
-                        </div>
+            <!-- Уведомление -->
+            <div v-if="showNotification" 
+                 :class="['notification', notificationType]">
+                {{ notificationText }}
+            </div>
+
+            <div class="profile-wrapper">
+                <!-- Основная информация профиля -->
+                <div class="profile-card">
+                    <div class="profile-header">
+                        <h2>Личный кабинет</h2>
                     </div>
                     
-                    <div class="profile-info">
-                        <div class="info-group">
-                            <label>Имя пользователя</label>
-                            <p>{{ user.username }}</p>
+                    <div v-if="user" class="profile-content">
+                        <div class="profile-info-section">
+                            <div class="profile-avatar">
+                                <div class="avatar-circle">
+                                    {{ user.username.charAt(0).toUpperCase() }}
+                                </div>
+                            </div>
+                            
+                            <div class="profile-info">
+                                <div class="info-group">
+                                    <label>Имя пользователя</label>
+                                    <p>{{ user.username }}</p>
+                                </div>
+                                <div class="info-group">
+                                    <label>Email</label>
+                                    <p>{{ user.email }}</p>
+                                </div>
+                            </div>
                         </div>
-                        <div class="info-group">
-                            <label>Email</label>
-                            <p>{{ user.email }}</p>
-                        </div>
+                        
+                        <button @click="logout" class="logout-button">
+                            Выйти из аккаунта
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Отдельная карточка с покупками -->
+                <div class="purchases-card">
+                    <div class="purchases-header">
+                        <h2>Мои анализы</h2>
+                        <span class="purchases-count">{{ user?.productList?.length || 0 }}</span>
                     </div>
                     
-                    <button @click="logout" class="logout-button">
-                        Выйти из аккаунта
-                    </button>
-                </div>
-                
-                <div v-else class="profile-loading">
-                    <p>Загрузка данных...</p>
+                    <div v-if="user?.productList?.length > 0" class="purchases-list">
+                        <div v-for="product in user.productList" 
+                             :key="product.id" 
+                             class="purchase-item">
+                            <h4>{{ product.name }}</h4>
+                        </div>
+                        <div class="purchases-total">
+                            <span class="total-label">Итого:</span>
+                            <span class="total-amount">{{ calculateTotal }} €</span>
+                        </div>
+                    </div>
+                    <div v-else class="empty-purchases">
+                        <i class="fas fa-flask"></i>
+                        <p>У вас пока нет заказанных анализов</p>
+                        <router-link to="/catalog" class="browse-catalog-btn">
+                            Перейти в каталог
+                        </router-link>
+                    </div>
                 </div>
             </div>
         </div>

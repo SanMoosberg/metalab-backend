@@ -6,6 +6,7 @@ import SanMosb.Meta.Lab.repositories.ProductRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,7 +33,7 @@ public class ProductServices {
         return product;
     }
     @Transactional
-    public void update(String name, String description, int price, Product updatedProduct){
+    public void update(String name, String description, BigDecimal price, Product updatedProduct){
         updatedProduct.setName(name);
         updatedProduct.setDescription(description);
         updatedProduct.setPrice(price);

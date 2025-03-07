@@ -33,10 +33,10 @@ public class MainController {
         return productServices.findAll();
     }
 
-    @GetMapping("/clients")
-    public List<Client> showClients() {
-        return clientServices.findAll();
-    }
+//    @GetMapping("/clients")
+//    public List<Client> showClients() {
+//        return clientServices.findAll();
+//    }
 
     @PostMapping("/products")
     @PreAuthorize("hasRole('ADMIN')")
@@ -49,11 +49,11 @@ public class MainController {
         productServices.delete(id);
         return ResponseEntity.ok(HttpStatus.OK);
     }
-    @DeleteMapping("/clients/{id}")
-    public ResponseEntity<HttpStatus> deleteClient(@PathVariable("id") int id) {
-        clientServices.delete(id);
-        return ResponseEntity.ok(HttpStatus.OK);
-    }
+//    @DeleteMapping("/clients/{id}")
+//    public ResponseEntity<HttpStatus> deleteClient(@PathVariable("id") int id) {
+//        clientServices.delete(id);
+//        return ResponseEntity.ok(HttpStatus.OK);
+//    }
     @PostMapping("/clients/{id1}/{id2}")
     public void buyProduct(@PathVariable("id1") int clientId, @PathVariable("id2") int productId){
         clientServices.buyProduct(clientId, productId);
@@ -62,13 +62,12 @@ public class MainController {
     public void removeOrder(@PathVariable("id1") int clientId, @PathVariable("id2") int productId){
         clientServices.removeOrder(clientId, productId);
     }
-    @PatchMapping("/clients/{id}")
-    public ResponseEntity<Client> editClient(@RequestBody Client client, @PathVariable("id") int id){
-        clientServices.update(client.getUsername(), client.getEmail(), client);
-        Client editedClient = clientServices.findOne(id);
-        return new ResponseEntity<>(editedClient, HttpStatus.OK);
-    }
-    // Только администраторы могут редактировать анализы
+//    @PatchMapping("/clients/{id}")
+//    public ResponseEntity<Client> editClient(@RequestBody Client client, @PathVariable("id") int id){
+//        clientServices.update(client.getUsername(), client.getEmail(), client);
+//        Client editedClient = clientServices.findOne(id);
+//        return new ResponseEntity<>(editedClient, HttpStatus.OK);
+//    }
     @PatchMapping("/products/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Product> editProduct(@RequestBody Product product, @PathVariable("id") int id) {

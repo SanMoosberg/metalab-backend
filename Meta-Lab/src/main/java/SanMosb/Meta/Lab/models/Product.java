@@ -3,6 +3,7 @@ package SanMosb.Meta.Lab.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
+import java.math.BigDecimal;
 
 import java.util.List;
 
@@ -21,13 +22,13 @@ public class Product {
     private String description;
 
     @Column(name = "price")
-    private int price;
+    private BigDecimal price;
 
     @ManyToMany(mappedBy = "productList")
     @JsonIgnoreProperties("productList")
     private List<Client> buyers;
 
-    public Product(String name, String description, int price) {
+    public Product(String name, String description, BigDecimal price) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -61,11 +62,11 @@ public class Product {
         this.description = description;
     }
 
-    public int getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(int price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 
