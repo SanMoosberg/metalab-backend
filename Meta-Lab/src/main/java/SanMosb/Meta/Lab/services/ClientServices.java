@@ -29,14 +29,17 @@ public class ClientServices {
     public List<Client> findAll(){
         return clientRepository.findAll();
     }
+
     public Client findOne(int id){
         Optional<Client> foundClient = clientRepository.findById(id);
         return foundClient.orElse(null);
     }
+
     public Client findByUsername(String username){
         Optional<Client> foundClient = clientRepository.findByUsername(username);
         return foundClient.orElse(null);
     }
+
     @Transactional
     public Client save(Client client) {
         clientRepository.save(client);

@@ -312,7 +312,7 @@ const Catalog = {
             <input v-model="newProduct.price" type="number" step="0.01" placeholder="Цена">
             
             <button @click="addOrEditProduct" class="admin-button">
-                {{ isEditing ? "Изменить анализ" : "Добавить анализ" }}
+                {{isEditing ? "Изменить анализ" : "Добавить анализ"}}
             </button>
             
             <button v-if="isEditing" @click="cancelEditing" class="cancel-button">
@@ -538,9 +538,9 @@ const Auth = {
     <div class="auth-container">
         <div class="auth-card">
             <div class="auth-header">
-                <h2>{{ isLogin ? 'Вход в систему' : 'Регистрация' }}</h2>
+                <h2>{{isLogin ? 'Вход в систему' : 'Регистрация'}}</h2>
                 <p class="auth-subtitle">
-                    {{ isLogin ? 'Войдите в свой аккаунт для доступа к услугам' : 'Создайте аккаунт для доступа к услугам' }}
+                    {{isLogin ? 'Войдите в свой аккаунт для доступа к услугам' : 'Создайте аккаунт для доступа к услугам'}}
                 </p>
             </div>
 
@@ -605,9 +605,9 @@ const Auth = {
 
             <div class="auth-footer">
                 <p>
-                    {{ isLogin ? 'Нет аккаунта?' : 'Уже есть аккаунт?' }}
+                    {{isLogin ? 'Нет аккаунта?' : 'Уже есть аккаунт?'}}
                     <a href="#" @click.prevent="toggleForm">
-                        {{ isLogin ? 'Зарегистрируйтесь' : 'Войдите' }}
+                        {{isLogin ? 'Зарегистрируйтесь' : 'Войдите'}}
                     </a>
                 </p>
             </div>
@@ -620,6 +620,7 @@ const Profile = {
     data() {
         return {
             user: null,
+            bookings: [],
             showNotification: false,
             notificationText: '',
             notificationType: ''
@@ -630,8 +631,27 @@ const Profile = {
             try {
                 const response = await axios.get('/api/profile');
                 this.user = response.data;
+                await this.fetchUserBookings();
             } catch (error) {
                 console.error('Ошибка при загрузке профиля:', error);
+            }
+        },
+        async fetchUserBookings() {
+            try {
+                const response = await axios.get('/api/main/bookings');
+                this.bookings = response.data;
+            } catch (error) {
+                console.error('Ошибка при загрузке бронирований:', error);
+            }
+        },
+        async cancelBooking(bookingId) {
+            try {
+                await axios.delete(`/api/main/bookings/${bookingId}`);
+                this.showToast('Бронирование отменено', 'success');
+                await this.fetchUserBookings();
+            } catch (error) {
+                console.error('Ошибка при отмене бронирования:', error);
+                this.showToast('Ошибка при отмене бронирования', 'error');
             }
         },
         logout() {
@@ -647,6 +667,13 @@ const Profile = {
             setTimeout(() => {
                 this.showNotification = false;
             }, 3000);
+        },
+        formatDate(dateStr) {
+            const date = new Date(dateStr);
+            return date.toLocaleDateString('ru-RU');
+        },
+        formatTime(timeStr) {
+            return timeStr.substring(0, 5);
         }
     },
     computed: {
@@ -694,6 +721,38 @@ const Profile = {
                             </div>
                         </div>
                         
+                        <!-- Секция бронирований -->
+                        <div class="bookings-section">
+                            <h3>Мои бронирования</h3>
+                            <div v-if="bookings.length > 0" class="bookings-list">
+                                <div v-for="booking in bookings" 
+                                     :key="booking.id" 
+                                     class="booking-item"
+                                >
+                                    <div class="booking-info">
+                                        <div class="booking-date">
+                                            {{ formatDate(booking.date) }}
+                                        </div>
+                                        <div class="booking-time">
+                                            {{ formatTime(booking.startTime) }} - {{ formatTime(booking.endTime) }}
+                                        </div>
+                                    </div>
+                                    <button @click="cancelBooking(booking.id)" 
+                                            class="cancel-booking-btn"
+                                    >
+                                        Отменить
+                                    </button>
+                                </div>
+                            </div>
+                            <div v-else class="empty-bookings">
+                                <i class="fas fa-calendar-times"></i>
+                                <p>У вас пока нет бронирований</p>
+                                <router-link to="/booking" class="book-time-btn">
+                                    Забронировать время
+                                </router-link>
+                            </div>
+                        </div>
+                        
                         <button @click="logout" class="logout-button">
                             Выйти из аккаунта
                         </button>
@@ -731,13 +790,276 @@ const Profile = {
     `
 };
 
+const Booking = {
+    data() {
+        return {
+            currentWeek: '',
+            weekDates: [],
+            timeSlots: {},
+            isAdmin: false,
+            isAuthenticated: false,
+            client: null,
+            showNotification: false,
+            notificationText: '',
+            notificationType: '',
+            timeIntervals: []
+        };
+    },
+    async created() {
+        // Check authentication and admin status
+        const token = localStorage.getItem("jwtToken");
+        if (token) {
+            this.isAuthenticated = true;
+            const profileResponse = await axios.get("/api/profile", {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+            this.client = profileResponse.data;
+            this.isAdmin = profileResponse.data.role === "ADMIN";
+        }
+        
+        // Generate time intervals (8:00 to 18:00 with 30-minute steps)
+        for (let hour = 8; hour < 18; hour++) {
+            this.timeIntervals.push(
+                `${hour.toString().padStart(2, '0')}:00`,
+                `${hour.toString().padStart(2, '0')}:30`
+            );
+        }
+        
+        // Set current week and load slots
+        this.setCurrentWeek(new Date());
+    },
+    methods: {
+        setCurrentWeek(date) {
+            const curr = new Date(date);
+            const first = curr.getDate() - curr.getDay() + 1; // Monday
+            
+            this.weekDates = Array(7).fill().map((_, i) => {
+                const day = new Date(curr.setDate(first + i));
+                return this.formatDate(day);
+            });
+            
+            this.loadWeekSlots();
+        },
+        
+        formatDate(date) {
+            return date.toISOString().split('T')[0];
+        },
+        
+        async loadWeekSlots() {
+            this.timeSlots = {};
+            
+            for (const date of this.weekDates) {
+                try {
+                    const response = await axios.get(`/api/main/slots`, {
+                        params: { date: date }
+                    });
+                    this.timeSlots[date] = response.data;
+                } catch (error) {
+                    console.error('Error fetching slots for date:', date, error);
+                    this.timeSlots[date] = [];
+                }
+            }
+        },
+        
+        async generateSlots(date) {
+            try {
+                const response = await axios.post(`/api/main/slots/generate`, null, {
+                    params: { date: date }
+                });
+                this.timeSlots[date] = response.data;
+                this.showToast('Слоты успешно сгенерированы', 'success');
+            } catch (error) {
+                console.error('Error generating slots:', error);
+                this.showToast('Ошибка при генерации слотов', 'error');
+            }
+        },
+        
+        async blockSlot(slotId) {
+            try {
+                await axios.post(`/api/main/slots/${slotId}/block`);
+                this.showToast('Слот заблокирован', 'success');
+                await this.loadWeekSlots();
+            } catch (error) {
+                console.error('Error blocking slot:', error);
+                this.showToast('Ошибка при блокировке слота', 'error');
+            }
+        },
+        
+        async bookSlot(slotId) {
+            if (!this.isAuthenticated) {
+                this.$router.push('/login');
+                return;
+            }
+            
+            try {
+                const response = await axios.post(`/api/main/book`, null, {
+                    params: {
+                        slotId: slotId,
+                        clientId: this.client.id
+                    }
+                });
+                this.showToast('Время успешно забронировано', 'success');
+                await this.loadWeekSlots();
+            } catch (error) {
+                console.error('Error booking slot:', error);
+                this.showToast('Ошибка при бронировании', 'error');
+            }
+        },
+        
+        async cancelBooking(bookingId) {
+            try {
+                await axios.delete(`/api/main/bookings/${bookingId}`);
+                this.showToast('Бронирование отменено', 'success');
+                await this.loadWeekSlots();
+            } catch (error) {
+                console.error('Error canceling booking:', error);
+                this.showToast('Ошибка при отмене бронирования', 'error');
+            }
+        },
+        
+        showToast(text, type) {
+            this.notificationText = text;
+            this.notificationType = type;
+            this.showNotification = true;
+            setTimeout(() => {
+                this.showNotification = false;
+            }, 3000);
+        },
+        
+        formatTimeRange(slot) {
+            if (!slot || !slot.startTime || !slot.endTime) return '';
+            return `${slot.startTime.substring(0, 5)} - ${slot.endTime.substring(0, 5)}`;
+        },
+        
+        getSlotForTimeAndDate(time, date) {
+            const slots = this.timeSlots[date] || [];
+            return slots.find(slot => 
+                slot.startTime.substring(0, 5) === time
+            );
+        },
+        
+        navigateWeek(direction) {
+            const firstDate = new Date(this.weekDates[0]);
+            firstDate.setDate(firstDate.getDate() + (direction * 7));
+            this.setCurrentWeek(firstDate);
+        },
+        
+        formatDayDate(dateStr) {
+            const date = new Date(dateStr);
+            const days = ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'];
+            return `${days[date.getDay()]}, ${date.getDate()}`;
+        },
+        
+        isToday(dateStr) {
+            const today = this.formatDate(new Date());
+            return dateStr === today;
+        },
+        
+        isPastDate(dateStr) {
+            const today = this.formatDate(new Date());
+            return dateStr < today;
+        }
+    },
+    template: `
+        <div class="booking-container">
+            <!-- Notification -->
+            <div v-if="showNotification" 
+                 :class="['notification', notificationType]">
+                {{ notificationText }}
+            </div>
+
+            <!-- Week Navigation -->
+            <div class="week-navigation">
+                <button @click="navigateWeek(-1)" class="nav-btn">
+                    <i class="fas fa-chevron-left"></i> Предыдущая неделя
+                </button>
+                <h2>{{ formatDayDate(weekDates[0]) }} - {{ formatDayDate(weekDates[6]) }}</h2>
+                <button @click="navigateWeek(1)" class="nav-btn">
+                    Следующая неделя <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+
+            <!-- Weekly Calendar -->
+            <div class="weekly-calendar">
+                <!-- Header with dates -->
+                <div class="calendar-header">
+                    <div class="time-column"></div>
+                    <div v-for="date in weekDates" 
+                         :key="date" 
+                         :class="['date-column', { 
+                             'today': isToday(date),
+                             'past-date': isPastDate(date)
+                         }]"
+                    >
+                        <div class="date-header">
+                            {{ formatDayDate(date) }}
+                            <button v-if="isAdmin && !isPastDate(date)" 
+                                    @click="generateSlots(date)"
+                                    class="generate-slots-btn"
+                            >
+                                Сделать рабочим
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Time slots grid -->
+                <div class="calendar-body">
+                    <div v-for="time in timeIntervals" 
+                         :key="time" 
+                         class="time-row"
+                    >
+                        <div class="time-label">{{ time }}</div>
+                        <div v-for="date in weekDates" 
+                             :key="date"
+                             class="slot-cell"
+                        >
+                            <div v-if="getSlotForTimeAndDate(time, date)"
+                                 :class="['time-slot', {
+                                     'booked': getSlotForTimeAndDate(time, date).booked,
+                                     'blocked': getSlotForTimeAndDate(time, date).blocked
+                                 }]"
+                            >
+                                <div class="slot-actions" v-if="!isPastDate(date)">
+                                    <button v-if="isAdmin && !getSlotForTimeAndDate(time, date).booked"
+                                            @click="blockSlot(getSlotForTimeAndDate(time, date).id)"
+                                            class="block-btn"
+                                    >
+                                        Блокировать
+                                    </button>
+                                    <button v-else-if="!getSlotForTimeAndDate(time, date).blocked && 
+                                                     !getSlotForTimeAndDate(time, date).booked && 
+                                                     isAuthenticated"
+                                            @click="bookSlot(getSlotForTimeAndDate(time, date).id)"
+                                            class="book-btn"
+                                    >
+                                        Забронировать
+                                    </button>
+                                    <button v-else-if="getSlotForTimeAndDate(time, date).booked && 
+                                                     getSlotForTimeAndDate(time, date).clientId === client?.id"
+                                            @click="cancelBooking(getSlotForTimeAndDate(time, date).bookingId)"
+                                            class="cancel-btn"
+                                    >
+                                        Отменить
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `
+};
+
 const routes = [
     { path: '/', component: Home },
     { path: '/about', component: About },
     { path: '/catalog', component: Catalog },
     { path: '/contacts', component: Contacts },
     { path: '/login', component: Auth },
-    { path: '/profile', component: Profile }
+    { path: '/profile', component: Profile },
+    { path: '/booking', component: Booking }
 ];
 
 const router = new VueRouter({

@@ -41,5 +41,3 @@ public class AuthController {
         return new ResponseEntity<>(savedClient, HttpStatus.CREATED);
     }
 }
-
-

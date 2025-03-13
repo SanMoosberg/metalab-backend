@@ -3,6 +3,8 @@ package SanMosb.Meta.Lab.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+
 import java.math.BigDecimal;
 
 import java.util.List;
