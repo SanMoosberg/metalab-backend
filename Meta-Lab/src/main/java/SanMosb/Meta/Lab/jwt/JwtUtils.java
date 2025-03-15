@@ -17,7 +17,6 @@ public class JwtUtils {
     private final SecretKey key = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
 
     public String generateJwtToken(String username) {
-        System.out.println("Начало генерации JWT токена для пользователя: " + username);
         try {
             String token = Jwts.builder()
                     .subject(username)
@@ -25,10 +24,8 @@ public class JwtUtils {
                     .expiration(new Date(System.currentTimeMillis() + 3600000)) // Токен истекает через 1 час
                     .signWith(key) // Подписываем с помощью SecretKey
                     .compact();
-            System.out.println("JWT токен успешно сгенерирован: " + token);
             return token;
         } catch (Exception e) {
-            System.out.println("Ошибка при генерации JWT токена: " + e.getMessage());
             e.printStackTrace();
             throw e; // Перебрасываем исключение, чтобы оно могло быть обработано выше
         }
@@ -55,7 +52,6 @@ public class JwtUtils {
 
             return true;
         } catch (Exception e) {
-            System.out.println("Ошибка при проверке токена: " + e.getMessage());
             return false;
         }
     }

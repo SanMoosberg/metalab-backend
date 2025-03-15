@@ -619,8 +619,8 @@ const Auth = {
 const Profile = {
     data() {
         return {
-            user: null,
-            bookings: [],
+            client: null,
+            booking: null,
             showNotification: false,
             notificationText: '',
             notificationType: ''
@@ -630,25 +630,34 @@ const Profile = {
         async fetchUserProfile() {
             try {
                 const response = await axios.get('/api/profile');
-                this.user = response.data;
-                await this.fetchUserBookings();
+                this.client = response.data;
+                console.log('Профиль пользователя:', this.client);
+                if (this.client && this.client.id) {
+                    await this.fetchUserBooking(this.client.id);
+                }
             } catch (error) {
                 console.error('Ошибка при загрузке профиля:', error);
             }
         },
-        async fetchUserBookings() {
+        async fetchUserBooking(clientId) {
             try {
-                const response = await axios.get('/api/main/bookings');
-                this.bookings = response.data;
+                const response = await axios.get(`/api/main/bookings/by-client/${clientId}`);
+
+                if (response.data && typeof response.data === 'object' && response.data.id) {
+                    this.booking = response.data;
+                } else {
+                    this.booking = null;
+                }
             } catch (error) {
-                console.error('Ошибка при загрузке бронирований:', error);
+                console.error('Ошибка при загрузке бронирования:', error);
+                this.booking = null;
             }
         },
         async cancelBooking(bookingId) {
             try {
                 await axios.delete(`/api/main/bookings/${bookingId}`);
                 this.showToast('Бронирование отменено', 'success');
-                await this.fetchUserBookings();
+                this.booking = null;
             } catch (error) {
                 console.error('Ошибка при отмене бронирования:', error);
                 this.showToast('Ошибка при отмене бронирования', 'error');
@@ -669,18 +678,33 @@ const Profile = {
             }, 3000);
         },
         formatDate(dateStr) {
-            const date = new Date(dateStr);
-            return date.toLocaleDateString('ru-RU');
+            if (!dateStr) return '';
+            try {
+                const date = new Date(dateStr);
+                return date.toLocaleDateString('ru-RU');
+            } catch (e) {
+                console.error('Ошибка форматирования даты:', e);
+                return dateStr;
+            }
         },
         formatTime(timeStr) {
-            return timeStr.substring(0, 5);
+            if (!timeStr) return '';
+            try {
+                return timeStr.substring(0, 5);
+            } catch (e) {
+                console.error('Ошибка форматирования времени:', e);
+                return timeStr;
+            }
         }
     },
     computed: {
         calculateTotal() {
-            if (!this.user?.productList) return "0.00";
-            const total = this.user.productList.reduce((sum, product) => sum + Number(product.price), 0);
+            if (!this.client || !this.client.productList) return "0.00";
+            const total = this.client.productList.reduce((sum, product) => sum + Number(product.price), 0);
             return total.toFixed(2);
+        },
+        hasBooking() {
+            return this.booking !== null;
         }
     },
     mounted() {
@@ -701,45 +725,41 @@ const Profile = {
                         <h2>Личный кабинет</h2>
                     </div>
                     
-                    <div v-if="user" class="profile-content">
+                    <div v-if="client" class="profile-content">
                         <div class="profile-info-section">
                             <div class="profile-avatar">
                                 <div class="avatar-circle">
-                                    {{ user.username.charAt(0).toUpperCase() }}
+                                    {{ client.username.charAt(0).toUpperCase() }}
                                 </div>
                             </div>
                             
                             <div class="profile-info">
                                 <div class="info-group">
                                     <label>Имя пользователя</label>
-                                    <p>{{ user.username }}</p>
+                                    <p>{{ client.username }}</p>
                                 </div>
                                 <div class="info-group">
                                     <label>Email</label>
-                                    <p>{{ user.email }}</p>
+                                    <p>{{ client.email }}</p>
                                 </div>
                             </div>
                         </div>
                         
-                        <!-- Секция бронирований -->
+                        <!-- Секция бронирования -->
                         <div class="bookings-section">
-                            <h3>Мои бронирования</h3>
-                            <div v-if="bookings.length > 0" class="bookings-list">
-                                <div v-for="booking in bookings" 
-                                     :key="booking.id" 
-                                     class="booking-item"
-                                >
+                            <h3>Моё бронирование</h3>
+                            <div v-if="hasBooking" class="bookings-list">
+                                <div class="booking-item">
                                     <div class="booking-info">
                                         <div class="booking-date">
-                                            {{ formatDate(booking.date) }}
+                                            {{ booking.timeSlot ? formatDate(booking.timeSlot.date) : 'Дата не указана' }}
                                         </div>
                                         <div class="booking-time">
-                                            {{ formatTime(booking.startTime) }} - {{ formatTime(booking.endTime) }}
+                                            {{ booking.timeSlot ? formatTime(booking.timeSlot.startTime) + ' - ' + formatTime(booking.timeSlot.endTime) : 'Время не указано' }}
                                         </div>
                                     </div>
                                     <button @click="cancelBooking(booking.id)" 
-                                            class="cancel-booking-btn"
-                                    >
+                                            class="cancel-booking-btn">
                                         Отменить
                                     </button>
                                 </div>
@@ -762,24 +782,24 @@ const Profile = {
                 <!-- Отдельная карточка с покупками -->
                 <div class="purchases-card">
                     <div class="purchases-header">
-                        <h2>Мои анализы</h2>
-                        <span class="purchases-count">{{ user?.productList?.length || 0 }}</span>
+                        <h3>Мои анализы</h3>
+                        <span class="purchases-count">{{ client && client.productList ? client.productList.length : 0 }}</span>
                     </div>
-                    
-                    <div v-if="user?.productList?.length > 0" class="purchases-list">
-                        <div v-for="product in user.productList" 
+                    <div v-if="client && client.productList && client.productList.length > 0" class="purchases-list">
+                        <div v-for="product in client.productList" 
                              :key="product.id" 
                              class="purchase-item">
                             <h4>{{ product.name }}</h4>
-                        </div>
-                        <div class="purchases-total">
-                            <span class="total-label">Итого:</span>
-                            <span class="total-amount">{{ calculateTotal }} €</span>
+                            <span class="product-price">{{ Number(product.price).toFixed(2) }} €</span>
                         </div>
                     </div>
+                    <div v-if="client && client.productList && client.productList.length > 0" class="purchases-total">
+                        <span class="total-label">Итого:</span>
+                        <span class="total-amount">{{ calculateTotal }} €</span>
+                    </div>
                     <div v-else class="empty-purchases">
-                        <i class="fas fa-flask"></i>
-                        <p>У вас пока нет заказанных анализов</p>
+                        <i class="fas fa-shopping-cart"></i>
+                        <p>У вас пока нет купленных анализов</p>
                         <router-link to="/catalog" class="browse-catalog-btn">
                             Перейти в каталог
                         </router-link>
@@ -796,6 +816,7 @@ const Booking = {
             currentWeek: '',
             weekDates: [],
             timeSlots: {},
+            bookings: {},
             isAdmin: false,
             isAuthenticated: false,
             client: null,
@@ -806,7 +827,6 @@ const Booking = {
         };
     },
     async created() {
-        // Check authentication and admin status
         const token = localStorage.getItem("jwtToken");
         if (token) {
             this.isAuthenticated = true;
@@ -816,81 +836,106 @@ const Booking = {
             this.client = profileResponse.data;
             this.isAdmin = profileResponse.data.role === "ADMIN";
         }
-        
-        // Generate time intervals (8:00 to 18:00 with 30-minute steps)
+
         for (let hour = 8; hour < 18; hour++) {
             this.timeIntervals.push(
                 `${hour.toString().padStart(2, '0')}:00`,
                 `${hour.toString().padStart(2, '0')}:30`
             );
         }
-        
-        // Set current week and load slots
         this.setCurrentWeek(new Date());
     },
     methods: {
         setCurrentWeek(date) {
             const curr = new Date(date);
-            const first = curr.getDate() - curr.getDay() + 1; // Monday
-            
+            const first = curr.getDate() - curr.getDay() + 1; // Понедельник
+
             this.weekDates = Array(7).fill().map((_, i) => {
                 const day = new Date(curr.setDate(first + i));
                 return this.formatDate(day);
             });
-            
+
             this.loadWeekSlots();
         },
-        
         formatDate(date) {
             return date.toISOString().split('T')[0];
         },
-        
+        canCancelBooking(slot) {
+            if (!slot || slot.status !== 'BOOKED' || !this.client) {
+                return false;
+            }
+            const booking = this.bookings[slot.id];
+            if (!booking) {
+                return false;
+            }
+            return booking.clientId === this.client.id;
+        },
+
         async loadWeekSlots() {
-            this.timeSlots = {};
+            this.bookings = {};
             
             for (const date of this.weekDates) {
                 try {
                     const response = await axios.get(`/api/main/slots`, {
                         params: { date: date }
                     });
-                    this.timeSlots[date] = response.data;
+                    const slots = response.data;
+                    for (const slot of slots) {
+                        if (slot.status === 'BOOKED') {
+                            try {
+                                const bookingResponse = await axios.get(`/api/main/bookings/${slot.id}`);
+                                const booking = bookingResponse.data;
+                                this.$set(this.bookings, slot.id, booking);
+                            } catch (error) {
+                                console.error(`Ошибка при получении информации о бронировании для слота ${slot.id}:`, error);
+                            }
+                        }
+                    }
+                    this.$set(this.timeSlots, date, slots);
                 } catch (error) {
-                    console.error('Error fetching slots for date:', date, error);
-                    this.timeSlots[date] = [];
+                    console.error(`Ошибка при получении слотов для даты ${date}:`, error);
                 }
             }
         },
-        
+
+
         async generateSlots(date) {
             try {
-                const response = await axios.post(`/api/main/slots/generate`, null, {
+                console.log(`Генерация слотов для даты: ${date}`);
+                await axios.post(`/api/main/slots/generate`, null, {
                     params: { date: date }
                 });
+
+                // После генерации сразу подгружаем актуальные слоты
+                const response = await axios.get(`/api/main/slots`, {
+                    params: { date: date }
+                });
+
                 this.timeSlots[date] = response.data;
                 this.showToast('Слоты успешно сгенерированы', 'success');
             } catch (error) {
-                console.error('Error generating slots:', error);
+                console.error('Ошибка при генерации слотов:', error);
                 this.showToast('Ошибка при генерации слотов', 'error');
             }
         },
-        
+
         async blockSlot(slotId) {
             try {
                 await axios.post(`/api/main/slots/${slotId}/block`);
                 this.showToast('Слот заблокирован', 'success');
                 await this.loadWeekSlots();
             } catch (error) {
-                console.error('Error blocking slot:', error);
+                console.error('Ошибка при блокировке слота:', error);
                 this.showToast('Ошибка при блокировке слота', 'error');
             }
         },
-        
+
         async bookSlot(slotId) {
             if (!this.isAuthenticated) {
                 this.$router.push('/login');
                 return;
             }
-            
+
             try {
                 const response = await axios.post(`/api/main/book`, null, {
                     params: {
@@ -898,25 +943,30 @@ const Booking = {
                         clientId: this.client.id
                     }
                 });
+
+                const booking = response.data;
+
+                this.$set(this.bookings, slotId, booking);
+
                 this.showToast('Время успешно забронировано', 'success');
                 await this.loadWeekSlots();
             } catch (error) {
-                console.error('Error booking slot:', error);
+                console.error('Ошибка при бронировании:', error);
                 this.showToast('Ошибка при бронировании', 'error');
             }
         },
-        
+
         async cancelBooking(bookingId) {
             try {
                 await axios.delete(`/api/main/bookings/${bookingId}`);
                 this.showToast('Бронирование отменено', 'success');
                 await this.loadWeekSlots();
             } catch (error) {
-                console.error('Error canceling booking:', error);
+                console.error('Ошибка при отмене бронирования:', error);
                 this.showToast('Ошибка при отмене бронирования', 'error');
             }
         },
-        
+
         showToast(text, type) {
             this.notificationText = text;
             this.notificationType = type;
@@ -925,36 +975,25 @@ const Booking = {
                 this.showNotification = false;
             }, 3000);
         },
-        
-        formatTimeRange(slot) {
-            if (!slot || !slot.startTime || !slot.endTime) return '';
-            return `${slot.startTime.substring(0, 5)} - ${slot.endTime.substring(0, 5)}`;
-        },
-        
-        getSlotForTimeAndDate(time, date) {
+        getSlotForTime(time, date) {
             const slots = this.timeSlots[date] || [];
-            return slots.find(slot => 
-                slot.startTime.substring(0, 5) === time
-            );
+            const foundSlot = slots.find(slot => slot.startTime.slice(0, 5) === time);
+            return foundSlot;
         },
-        
         navigateWeek(direction) {
             const firstDate = new Date(this.weekDates[0]);
             firstDate.setDate(firstDate.getDate() + (direction * 7));
             this.setCurrentWeek(firstDate);
         },
-        
         formatDayDate(dateStr) {
             const date = new Date(dateStr);
             const days = ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'];
             return `${days[date.getDay()]}, ${date.getDate()}`;
         },
-        
         isToday(dateStr) {
             const today = this.formatDate(new Date());
             return dateStr === today;
         },
-        
         isPastDate(dateStr) {
             const today = this.formatDate(new Date());
             return dateStr < today;
@@ -997,7 +1036,7 @@ const Booking = {
                                     @click="generateSlots(date)"
                                     class="generate-slots-btn"
                             >
-                                Сделать рабочим
+                                Сгенерировать времена
                             </button>
                         </div>
                     </div>
@@ -1014,34 +1053,37 @@ const Booking = {
                              :key="date"
                              class="slot-cell"
                         >
-                            <div v-if="getSlotForTimeAndDate(time, date)"
+                            <div v-if="getSlotForTime(time, date)"
                                  :class="['time-slot', {
-                                     'booked': getSlotForTimeAndDate(time, date).booked,
-                                     'blocked': getSlotForTimeAndDate(time, date).blocked
+                                     'free': getSlotForTime(time, date).status === 'FREE',
+                                     'booked': getSlotForTime(time, date).status === 'BOOKED',
+                                     'blocked': getSlotForTime(time, date).status === 'ADMIN_BLOCKED'
                                  }]"
                             >
-                                <div class="slot-actions" v-if="!isPastDate(date)">
-                                    <button v-if="isAdmin && !getSlotForTimeAndDate(time, date).booked"
-                                            @click="blockSlot(getSlotForTimeAndDate(time, date).id)"
-                                            class="block-btn"
-                                    >
-                                        Блокировать
-                                    </button>
-                                    <button v-else-if="!getSlotForTimeAndDate(time, date).blocked && 
-                                                     !getSlotForTimeAndDate(time, date).booked && 
-                                                     isAuthenticated"
-                                            @click="bookSlot(getSlotForTimeAndDate(time, date).id)"
-                                            class="book-btn"
-                                    >
-                                        Забронировать
-                                    </button>
-                                    <button v-else-if="getSlotForTimeAndDate(time, date).booked && 
-                                                     getSlotForTimeAndDate(time, date).clientId === client?.id"
-                                            @click="cancelBooking(getSlotForTimeAndDate(time, date).bookingId)"
-                                            class="cancel-btn"
-                                    >
-                                        Отменить
-                                    </button>
+                                <div class="slot-content">
+                                    <span class="slot-time">{{ time }}</span>
+                                    <div class="slot-actions" v-if="!isPastDate(date)">
+                                        <button v-if="isAdmin && getSlotForTime(time, date).status === 'FREE'"
+                                                @click="blockSlot(getSlotForTime(time, date).id)"
+                                                class="block-btn"
+                                        >
+                                            Блокировать
+                                        </button>
+                                        <button v-else-if="getSlotForTime(time, date).status === 'FREE' && 
+                                                         isAuthenticated"
+                                                @click="bookSlot(getSlotForTime(time, date).id)"
+                                                class="book-btn"
+                                        >
+                                            Забронировать
+                                        </button>
+                                        <button v-else-if="getSlotForTime(time, date).status === 'BOOKED' && 
+                                                         canCancelBooking(getSlotForTime(time, date))"
+                                                @click="cancelBooking(bookings[getSlotForTime(time, date).id].id)"
+                                                class="cancel-btn"
+                                        >
+                                            Отменить
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -1051,6 +1093,7 @@ const Booking = {
         </div>
     `
 };
+
 
 const routes = [
     { path: '/', component: Home },
