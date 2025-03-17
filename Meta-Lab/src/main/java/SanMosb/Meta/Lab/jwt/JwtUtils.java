@@ -22,33 +22,31 @@ public class JwtUtils {
                     .subject(username)
                     .issuedAt(new Date())
                     .expiration(new Date(System.currentTimeMillis() + 3600000)) // Токен истекает через 1 час
-                    .signWith(key) // Подписываем с помощью SecretKey
+                    .signWith(key)
                     .compact();
             return token;
         } catch (Exception e) {
             e.printStackTrace();
-            throw e; // Перебрасываем исключение, чтобы оно могло быть обработано выше
+            throw e;
         }
     }
 
-
     public String getUsernameFromJwtToken(String token) {
         Claims claims = Jwts.parser()
-                .verifyWith(key) // Используем verifyWith для проверки подписи
-                .build() // Создаем JwtParser
-                .parseSignedClaims(token) // Извлекаем подпись
-                .getPayload(); // Получаем полезную нагрузку
+                .verifyWith(key)
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
 
         return claims.getSubject();
     }
 
-
     public boolean validateJwtToken(String token) {
         try {
             Jwts.parser()
-                    .verifyWith(key) // Проверяем подпись токена
+                    .verifyWith(key)
                     .build()
-                    .parseSignedClaims(token); // Если токен неверный, произойдет исключение
+                    .parseSignedClaims(token);
 
             return true;
         } catch (Exception e) {

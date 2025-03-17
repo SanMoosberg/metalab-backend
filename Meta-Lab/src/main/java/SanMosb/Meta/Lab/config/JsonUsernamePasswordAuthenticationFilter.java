@@ -29,10 +29,9 @@ public class JsonUsernamePasswordAuthenticationFilter extends UsernamePasswordAu
                 setDetails(request, authRequest);
                 return this.getAuthenticationManager().authenticate(authRequest);
             } catch (IOException e) {
-                throw new RuntimeException("Ошибка при чтении JSON данных", e);
+                throw new RuntimeException("Error reading JSON data", e);
             }
         }
-
         return super.attemptAuthentication(request, response);
     }
 }

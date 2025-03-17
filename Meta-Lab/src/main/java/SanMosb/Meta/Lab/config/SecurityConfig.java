@@ -27,7 +27,7 @@ public class SecurityConfig {
     private ClientDetailsServices clientDetailsServices;
 
     @Autowired
-    private JwtUtils jwtUtils; // Внедренный экземпляр
+    private JwtUtils jwtUtils;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -61,7 +61,7 @@ public class SecurityConfig {
         return (request, response, exception) -> {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.setContentType("application/json");
-            response.getWriter().write("{\"error\": \"Неверные учетные данные. Попробуйте снова.\"}");
+            response.getWriter().write("{\"error\": \"Incorrect credentials. Please try again.\"}");
             response.getWriter().flush();
         };
     }
@@ -87,7 +87,7 @@ public class SecurityConfig {
                         .logoutUrl("/api/auth/logout")
                         .logoutSuccessHandler((request, response, authentication) -> {
                             response.setStatus(HttpServletResponse.SC_OK);
-                            response.getWriter().write("{\"message\": \"Вы успешно вышли из системы.\"}");
+                            response.getWriter().write("{\"message\": \"You have successfully logged out.\"}");
                             response.getWriter().flush();
                         })
                 )

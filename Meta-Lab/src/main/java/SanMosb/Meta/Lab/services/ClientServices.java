@@ -18,13 +18,11 @@ public class ClientServices {
 
     private final ClientRepository clientRepository;
     private final ProductRepository productRepository;
-    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public ClientServices(ClientRepository clientRepository, ProductRepository productRepository, PasswordEncoder passwordEncoder) {
+    public ClientServices(ClientRepository clientRepository, ProductRepository productRepository) {
         this.clientRepository = clientRepository;
         this.productRepository = productRepository;
-        this.passwordEncoder = passwordEncoder;
     }
     public List<Client> findAll(){
         return clientRepository.findAll();
@@ -45,12 +43,14 @@ public class ClientServices {
         clientRepository.save(client);
         return client;
     }
+
     @Transactional
     public void update(String username, String email, Client updatedClient){
         updatedClient.setUsername(username);
         updatedClient.setEmail(email);
         clientRepository.save(updatedClient);
     }
+
     @Transactional
     public void delete(int id){
         clientRepository.deleteById(id);

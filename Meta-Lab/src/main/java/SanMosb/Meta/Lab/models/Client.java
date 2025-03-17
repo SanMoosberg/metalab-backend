@@ -21,19 +21,19 @@ public class Client {
     private int id;
 
     @Column(name = "username", unique = true, nullable = false)
-    @NotBlank(message = "Имя пользователя не может быть пустым")
-    @Size(min = 3, max = 20, message = "Имя пользователя должно содержать от 3 до 20 символов")
+    @NotBlank(message = "Username cannot be empty")
+    @Size(min = 3, max = 20, message = "Username must be between 3 and 20 characters long")
     private String username;
 
     @Column(name = "password", nullable = false)
-    @NotBlank(message = "Пароль не может быть пустым")
-    @Size(min = 8, message = "Пароль должен содержать минимум 8 символов")
-    @Pattern(regexp = "^(?=.*[A-Z])(?=.*\\d).*$", message = "Пароль должен содержать хотя бы одну заглавную букву и одну цифру")
+    @NotBlank(message = "Password cannot be empty")
+    @Size(min = 8, message = "Password must be at least 8 characters long")
+    @Pattern(regexp = "^(?=.*[A-Z])(?=.*\\d).*$", message = "The password must contain at least one uppercase letter and one number.")
     private String password;
 
     @Column(name = "email", unique = true, nullable = false)
-    @NotBlank(message = "Email не может быть пустым")
-    @Email(message = "Email должен быть в корректном формате")
+    @NotBlank(message = "Email cannot be empty")
+    @Email(message = "Email must be in the correct format")
     private String email;
 
     @ManyToMany
