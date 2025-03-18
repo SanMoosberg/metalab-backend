@@ -1,4 +1,3 @@
-
 const routes = [
     { path: '/', component: Home },
     { path: '/about', component: About },
@@ -8,7 +7,6 @@ const routes = [
     { path: '/profile', component: Profile },
     { path: '/booking', component: Booking }
 ];
-
 
 const router = new VueRouter({
     routes

@@ -170,7 +170,6 @@ const Booking = {
     },
     template: `
         <div class="booking-container">
-            <!-- Notification -->
             <div v-if="showNotification" 
                  :class="['notification', notificationType]">
                 {{ notificationText }}
