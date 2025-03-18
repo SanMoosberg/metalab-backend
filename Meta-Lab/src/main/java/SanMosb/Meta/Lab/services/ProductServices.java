@@ -33,10 +33,12 @@ public class ProductServices {
         return product;
     }
     @Transactional
-    public void update(String name, String description, BigDecimal price, Product updatedProduct){
-        updatedProduct.setName(name);
-        updatedProduct.setDescription(description);
-        updatedProduct.setPrice(price);
+    public void update(String name, String description, BigDecimal price, Product existingProduct) {
+        Product updatedProduct = existingProduct.toBuilder()
+                .name(name)
+                .description(description)
+                .price(price)
+                .build();
         productRepository.save(updatedProduct);
     }
     @Transactional

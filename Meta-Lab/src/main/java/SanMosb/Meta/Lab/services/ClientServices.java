@@ -57,22 +57,35 @@ public class ClientServices {
     }
 
     @Transactional
-    public void buyProduct(int clientId, int productId){
-        Optional<Client> clientOpt = clientRepository.findById(clientId);
-        Optional<Product> productOpt = productRepository.findById(productId);
-        Client client = clientOpt.get();
-        Product product = productOpt.get();
-        client.buy(product);
-        clientRepository.save(client);
+    public void buyProduct(int clientId, int productId) {
+        Client client = clientRepository.findById(clientId)
+                .orElseThrow(() -> new IllegalArgumentException("Client not found"));
+
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new IllegalArgumentException("Product not found"));
+
+        if (!client.getProductList().contains(product)) {
+            client.getProductList().add(product);
+            clientRepository.save(client);
+        } else {
+            throw new IllegalStateException("Product already bought");
+        }
     }
+
     @Transactional
-    public void removeOrder(int clientId, int productId){
-        Optional<Client> clientOpt = clientRepository.findById(clientId);
-        Optional<Product> productOpt = productRepository.findById(productId);
-        Client client = clientOpt.get();
-        Product product = productOpt.get();
-        client.removeOrder(product);
-        clientRepository.save(client);
+    public void removeOrder(int clientId, int productId) {
+        Client client = clientRepository.findById(clientId)
+                .orElseThrow(() -> new IllegalArgumentException("Client not found"));
+
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new IllegalArgumentException("Product not found"));
+
+        if (client.getProductList().contains(product)) {
+            client.getProductList().remove(product);
+            clientRepository.save(client);
+        } else {
+            throw new IllegalStateException("Product not in order list");
+        }
     }
 }
 
