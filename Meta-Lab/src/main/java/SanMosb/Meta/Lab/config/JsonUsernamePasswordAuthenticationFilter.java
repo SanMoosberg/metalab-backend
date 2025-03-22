@@ -1,5 +1,6 @@
 package SanMosb.Meta.Lab.config;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -19,13 +20,20 @@ public class JsonUsernamePasswordAuthenticationFilter extends UsernamePasswordAu
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
             throws AuthenticationException {
 
-        if ("application/json".equals(request.getContentType())) {
+        String contentType = request.getContentType();
+        if (contentType != null && contentType.startsWith("application/json")) {
             try {
-                Map<String, String> credentials = objectMapper.readValue(request.getInputStream(), Map.class);
+                Map<String, String> credentials = objectMapper.readValue(
+                        request.getInputStream(),
+                        new TypeReference<Map<String, String>>() {}
+                );
+
                 String username = credentials.get("username");
                 String password = credentials.get("password");
 
-                UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(username, password);
+                UsernamePasswordAuthenticationToken authRequest =
+                        new UsernamePasswordAuthenticationToken(username, password);
+
                 setDetails(request, authRequest);
                 return this.getAuthenticationManager().authenticate(authRequest);
             } catch (IOException e) {

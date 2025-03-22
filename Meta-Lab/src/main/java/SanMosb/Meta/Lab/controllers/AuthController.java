@@ -20,8 +20,8 @@ import java.util.Map;
 @RequestMapping("/api/auth")
 public class AuthController {
 
-    private PasswordEncoder passwordEncoder;
-    private ClientServices clientServices;
+    private final PasswordEncoder passwordEncoder;
+    private final ClientServices clientServices;
     private final JwtUtils jwtUtils;
 
     @Autowired
@@ -30,7 +30,6 @@ public class AuthController {
         this.clientServices = clientServices;
         this.passwordEncoder = passwordEncoder;
     }
-
     @PostMapping("/register")
     public ResponseEntity<?> registerClient(@Valid @RequestBody Client client, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
@@ -41,18 +40,24 @@ public class AuthController {
         String rawPassword = client.getPassword();
         String encodedPassword = passwordEncoder.encode(rawPassword);
         client.setPassword(encodedPassword);
+
         Client savedClient = clientServices.save(client);
+
         return new ResponseEntity<>(savedClient, HttpStatus.CREATED);
     }
+
     @GetMapping("/profile")
     public ResponseEntity<?> getProfile(HttpServletRequest request) {
         String token = request.getHeader("Authorization");
         if (token != null && token.startsWith("Bearer ")) {
             token = token.substring(7);
-            String username = jwtUtils.getUsernameFromJwtToken(token);
-            Client client = clientServices.findByUsername(username);
-            if (client != null) {
-                return ResponseEntity.ok(client);
+
+            if (jwtUtils.validateJwtToken(token)) {
+                String username = jwtUtils.getUsernameFromJwtToken(token);
+                Client client = clientServices.findByUsername(username);
+                if (client != null) {
+                    return ResponseEntity.ok(client);
+                }
             }
         }
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Failed to log in");

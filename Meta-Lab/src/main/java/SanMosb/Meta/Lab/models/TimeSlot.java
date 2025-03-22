@@ -1,5 +1,6 @@
-package SanMosb.Meta.Lab.dto;
+package SanMosb.Meta.Lab.models;
 
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -7,13 +8,20 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+@Entity
+@Table(name = "time_slots")
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 public class TimeSlot {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private LocalDate date;
     private LocalTime startTime;
     private LocalTime endTime;
-    private String status;
+
+    @Enumerated(EnumType.STRING)
+    private SlotStatus status;
 }

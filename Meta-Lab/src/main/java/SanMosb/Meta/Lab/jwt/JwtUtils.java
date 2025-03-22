@@ -3,6 +3,9 @@ package SanMosb.Meta.Lab.jwt;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 
@@ -13,32 +16,41 @@ import java.util.Date;
 @Component
 public class JwtUtils {
 
-    private final String secret = "YourSuperSecretKeyThatShouldBeAtLeast64BytesLongForHS512Algorithm!";
-    private final SecretKey key = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
+    private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
+    private final String secret;
+    private final SecretKey key;
+
+    public JwtUtils(@Value("${jwt.secret}") String secret) {
+        this.secret = secret;
+        this.key = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
+    }
 
     public String generateJwtToken(String username) {
         try {
-            String token = Jwts.builder()
+            return Jwts.builder()
                     .subject(username)
                     .issuedAt(new Date())
-                    .expiration(new Date(System.currentTimeMillis() + 3600000)) // Токен истекает через 1 час
+                    .expiration(new Date(System.currentTimeMillis() + 3600000))
                     .signWith(key)
                     .compact();
-            return token;
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Error generating JWT token for user: {}", username, e);
             throw e;
         }
     }
 
     public String getUsernameFromJwtToken(String token) {
-        Claims claims = Jwts.parser()
-                .verifyWith(key)
-                .build()
-                .parseSignedClaims(token)
-                .getPayload();
-
-        return claims.getSubject();
+        try {
+            Claims claims = Jwts.parser()
+                    .verifyWith(key)
+                    .build()
+                    .parseSignedClaims(token)
+                    .getPayload();
+            return claims.getSubject();
+        } catch (Exception e) {
+            logger.error("Error parsing JWT token", e);
+            throw e;
+        }
     }
 
     public boolean validateJwtToken(String token) {
@@ -47,9 +59,9 @@ public class JwtUtils {
                     .verifyWith(key)
                     .build()
                     .parseSignedClaims(token);
-
             return true;
         } catch (Exception e) {
+            logger.warn("Invalid JWT token", e);
             return false;
         }
     }
