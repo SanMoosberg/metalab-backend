@@ -3,6 +3,7 @@ package SanMosb.Meta.Lab.controllers;
 import SanMosb.Meta.Lab.models.Booking;
 import SanMosb.Meta.Lab.services.BookingService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -14,6 +15,8 @@ public class BookingController {
     public BookingController(BookingService bookingService) {
         this.bookingService = bookingService;
     }
+
+    @PreAuthorize("hasRole('USER')")
     @PostMapping("/book")
     public Booking bookSlot(@RequestParam Long slotId,
                             @RequestParam int clientId) {
@@ -21,6 +24,7 @@ public class BookingController {
         return booking;
     }
 
+    @PreAuthorize("hasRole('USER')")
     @DeleteMapping("/{bookingId}")
     public void cancelBooking(@PathVariable Long bookingId) {
         bookingService.cancelBooking(bookingId);
@@ -31,6 +35,7 @@ public class BookingController {
         Booking booking = bookingService.getBookingBySlotId(slotId);
         return booking;
     }
+
     @GetMapping("/by-client/{clientId}")
     public ResponseEntity<Booking> getBookingByClientId(@PathVariable int clientId) {
         Booking booking = bookingService.getBookingByClientId(clientId);

@@ -3,8 +3,9 @@ package SanMosb.Meta.Lab.services;
 import SanMosb.Meta.Lab.models.SlotStatus;
 import SanMosb.Meta.Lab.models.TimeSlot;
 import SanMosb.Meta.Lab.repositories.TimeSlotRepository;
-import jakarta.transaction.Transactional;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
 import java.time.LocalDate;
@@ -13,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-@Transactional
+@Transactional(readOnly = true)
 public class TimeSlotService {
 
     private final TimeSlotRepository timeSlotRepository;
@@ -22,6 +23,7 @@ public class TimeSlotService {
         this.timeSlotRepository = timeSlotRepository;
     }
 
+    @Transactional
     public List<TimeSlot> generateTimeSlots(LocalDate date) {
         LocalTime start = LocalTime.of(9, 0);
         LocalTime end = LocalTime.of(18, 0);
@@ -60,6 +62,7 @@ public class TimeSlotService {
         return slot;
     }
 
+    @Transactional
     public TimeSlot blockSlot(Long slotId) {
         TimeSlot slot = timeSlotRepository.findById(slotId)
                 .orElseThrow(() -> new RuntimeException("Slot not found: " + slotId));
@@ -68,8 +71,16 @@ public class TimeSlotService {
         return updatedSlot;
     }
 
+    @Transactional
     public TimeSlot saveSlot(TimeSlot slot) {
         TimeSlot savedSlot = timeSlotRepository.save(slot);
         return savedSlot;
+    }
+
+    @Scheduled(cron = "0 0 0 * * ?")
+    @Transactional
+    public void removeOldTimeslots() {
+        LocalDate today = LocalDate.now();
+        timeSlotRepository.deleteAllByDateBefore(today);
     }
 }

@@ -17,7 +17,7 @@ public class ClientDetailsServices implements UserDetailsService {
     private final ClientRepository clientRepository;
 
     @Autowired
-    public ClientDetailsServices(ClientRepository clientRepository){
+    public ClientDetailsServices(ClientRepository clientRepository) {
         this.clientRepository = clientRepository;
     }
 

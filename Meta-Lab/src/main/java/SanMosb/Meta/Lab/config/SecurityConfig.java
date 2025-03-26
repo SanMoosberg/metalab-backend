@@ -4,7 +4,6 @@ import SanMosb.Meta.Lab.jwt.JwtAuthenticationFilter;
 import SanMosb.Meta.Lab.jwt.JwtUtils;
 import SanMosb.Meta.Lab.services.ClientDetailsServices;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -23,11 +22,13 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class SecurityConfig {
 
-    @Autowired
-    private ClientDetailsServices clientDetailsServices;
+    private final ClientDetailsServices clientDetailsServices;
+    private final JwtUtils jwtUtils;
 
-    @Autowired
-    private JwtUtils jwtUtils;
+    public SecurityConfig(ClientDetailsServices clientDetailsServices, JwtUtils jwtUtils) {
+        this.clientDetailsServices = clientDetailsServices;
+        this.jwtUtils = jwtUtils;
+    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -75,6 +76,7 @@ public class SecurityConfig {
         customAuthFilter.setAuthenticationFailureHandler(authenticationFailureHandler());
 
         http
+                .anonymous(anonymous -> anonymous.authorities("ROLE_GUEST"))
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/**", "/index.html", "/static/**", "/front.js", "/style.css").permitAll()

@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
@@ -34,18 +35,23 @@ public class ProductController {
         Product savedProduct = productServices.save(product);
         return new ResponseEntity<>(savedProduct, HttpStatus.CREATED);
     }
+
     @DeleteMapping("/products/{id}")
-    public ResponseEntity<HttpStatus> deleteProduct(@PathVariable("id") int id){
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<HttpStatus> deleteProduct(@PathVariable("id") int id) {
         productServices.delete(id);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
     @PostMapping("/clients/{id1}/{id2}")
-    public void buyProduct(@PathVariable("id1") int clientId, @PathVariable("id2") int productId){
+    @PreAuthorize("hasRole('USER')")
+    public void buyProduct(@PathVariable("id1") int clientId, @PathVariable("id2") int productId) {
         clientServices.buyProduct(clientId, productId);
     }
+
     @DeleteMapping("/clients/{id1}/{id2}")
-    public void removeOrder(@PathVariable("id1") int clientId, @PathVariable("id2") int productId){
+    @PreAuthorize("hasRole('USER')")
+    public void removeOrder(@PathVariable("id1") int clientId, @PathVariable("id2") int productId) {
         clientServices.removeOrder(clientId, productId);
     }
 

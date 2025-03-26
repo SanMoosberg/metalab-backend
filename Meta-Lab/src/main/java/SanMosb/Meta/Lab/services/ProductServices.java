@@ -20,18 +20,22 @@ public class ProductServices {
     public ProductServices(ProductRepository productRepository) {
         this.productRepository = productRepository;
     }
-    public List<Product> findAll(){
+
+    public List<Product> findAll() {
         return productRepository.findAll();
     }
-    public Product findOne(int id){
+
+    public Product findOne(int id) {
         Optional<Product> foundProduct = productRepository.findById(id);
         return foundProduct.orElse(null);
     }
+
     @Transactional
-    public Product save(Product product){
+    public Product save(Product product) {
         productRepository.save(product);
         return product;
     }
+
     @Transactional
     public void update(String name, String description, BigDecimal price, Product existingProduct) {
         Product updatedProduct = existingProduct.toBuilder()
@@ -41,8 +45,9 @@ public class ProductServices {
                 .build();
         productRepository.save(updatedProduct);
     }
+
     @Transactional
-    public void delete(int id){
+    public void delete(int id) {
         productRepository.deleteById(id);
     }
 }

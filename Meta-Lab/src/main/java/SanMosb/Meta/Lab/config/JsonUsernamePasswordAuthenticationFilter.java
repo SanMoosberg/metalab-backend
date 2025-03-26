@@ -25,7 +25,8 @@ public class JsonUsernamePasswordAuthenticationFilter extends UsernamePasswordAu
             try {
                 Map<String, String> credentials = objectMapper.readValue(
                         request.getInputStream(),
-                        new TypeReference<Map<String, String>>() {}
+                        new TypeReference<Map<String, String>>() {
+                        }
                 );
 
                 String username = credentials.get("username");

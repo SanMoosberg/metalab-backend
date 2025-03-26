@@ -2,6 +2,7 @@ package SanMosb.Meta.Lab.controllers;
 
 import SanMosb.Meta.Lab.models.TimeSlot;
 import SanMosb.Meta.Lab.services.TimeSlotService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -18,6 +19,7 @@ public class TimeSlotController {
         this.timeSlotService = timeSlotService;
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/generate")
     public List<TimeSlot> generateSlots(@RequestParam("date") String dateStr) {
         LocalDate date = LocalDate.parse(dateStr);
@@ -31,7 +33,9 @@ public class TimeSlotController {
         List<TimeSlot> slots = timeSlotService.getSlotsByDate(date);
         return slots;
     }
+
     @PostMapping("/{slotId}/block")
+    @PreAuthorize("hasRole('ADMIN')")
     public void blockSlot(@PathVariable Long slotId) {
         timeSlotService.blockSlot(slotId);
     }

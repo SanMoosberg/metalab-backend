@@ -17,11 +17,9 @@ import java.util.Date;
 public class JwtUtils {
 
     private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
-    private final String secret;
     private final SecretKey key;
 
     public JwtUtils(@Value("${jwt.secret}") String secret) {
-        this.secret = secret;
         this.key = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
     }
 

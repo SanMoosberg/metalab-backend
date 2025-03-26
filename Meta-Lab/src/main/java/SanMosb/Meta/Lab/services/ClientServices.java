@@ -1,5 +1,6 @@
 package SanMosb.Meta.Lab.services;
 
+import SanMosb.Meta.Lab.jwt.JwtUtils;
 import SanMosb.Meta.Lab.models.Client;
 import SanMosb.Meta.Lab.models.Product;
 import SanMosb.Meta.Lab.repositories.ProductRepository;
@@ -9,7 +10,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import SanMosb.Meta.Lab.repositories.ClientRepository;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -18,42 +18,40 @@ public class ClientServices {
 
     private final ClientRepository clientRepository;
     private final ProductRepository productRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final JwtUtils jwtUtils;
 
     @Autowired
-    public ClientServices(ClientRepository clientRepository, ProductRepository productRepository) {
+    public ClientServices(ClientRepository clientRepository, ProductRepository productRepository, PasswordEncoder passwordEncoder
+            , JwtUtils jwtUtils) {
         this.clientRepository = clientRepository;
         this.productRepository = productRepository;
-    }
-    public List<Client> findAll(){
-        return clientRepository.findAll();
-    }
-
-    public Client findOne(int id){
-        Optional<Client> foundClient = clientRepository.findById(id);
-        return foundClient.orElse(null);
+        this.passwordEncoder = passwordEncoder;
+        this.jwtUtils = jwtUtils;
     }
 
-    public Client findByUsername(String username){
+    public Client findByUsername(String username) {
         Optional<Client> foundClient = clientRepository.findByUsername(username);
         return foundClient.orElse(null);
     }
 
+    public Client getClientFromJwt(String token) {
+        if (!jwtUtils.validateJwtToken(token)) return null;
+        String username = jwtUtils.getUsernameFromJwtToken(token);
+        return findByUsername(username);
+    }
+
     @Transactional
     public Client save(Client client) {
-        clientRepository.save(client);
-        return client;
-    }
+        if (findByUsername(client.getUsername()) != null) {
+            throw new IllegalStateException("Username already exists");
+        }
 
-    @Transactional
-    public void update(String username, String email, Client updatedClient){
-        updatedClient.setUsername(username);
-        updatedClient.setEmail(email);
-        clientRepository.save(updatedClient);
-    }
+        String encodedPassword = passwordEncoder.encode(client.getPassword());
+        client.setPassword(encodedPassword);
+        client.setRole("USER");
 
-    @Transactional
-    public void delete(int id){
-        clientRepository.deleteById(id);
+        return clientRepository.save(client);
     }
 
     @Transactional
