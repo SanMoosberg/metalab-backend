@@ -8,9 +8,9 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableScheduling
 public class MetaLabApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(MetaLabApplication.class, args);
-	}
-//sdf
+    public static void main(String[] args) {
+        SpringApplication.run(MetaLabApplication.class, args);
+    }
+
 }
 
