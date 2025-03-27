@@ -24,17 +24,24 @@ public class BookingService {
 
     @Transactional
     public Booking bookSlot(Long slotId, int clientId) {
+        if (bookingRepository.findByClientId(clientId).isPresent()) {
+            throw new IllegalStateException("The client already has a booking");
+        }
+
         TimeSlot slot = timeSlotService.getSlotById(slotId);
         if (slot.getStatus() != SlotStatus.FREE) {
             String errorMsg = "Slot is not FREE. Current status: " + slot.getStatus();
             throw new RuntimeException(errorMsg);
         }
+
         Booking booking = new Booking();
         booking.setClientId(clientId);
         booking.setTimeSlot(slot);
         Booking savedBooking = bookingRepository.save(booking);
+
         slot.setStatus(SlotStatus.BOOKED);
         timeSlotService.saveSlot(slot);
+
         return savedBooking;
     }
 

@@ -70,6 +70,14 @@ public class TimeSlotService {
         TimeSlot updatedSlot = timeSlotRepository.save(slot);
         return updatedSlot;
     }
+    @Transactional
+    public TimeSlot unblockSlot(Long slotId) {
+        TimeSlot slot = timeSlotRepository.findById(slotId)
+                .orElseThrow(() -> new RuntimeException("Slot not found: " + slotId));
+        slot.setStatus(SlotStatus.FREE);
+        TimeSlot updatedSlot = timeSlotRepository.save(slot);
+        return updatedSlot;
+    }
 
     @Transactional
     public TimeSlot saveSlot(TimeSlot slot) {

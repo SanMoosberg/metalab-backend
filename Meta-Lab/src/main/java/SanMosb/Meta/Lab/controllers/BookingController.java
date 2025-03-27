@@ -2,6 +2,7 @@ package SanMosb.Meta.Lab.controllers;
 
 import SanMosb.Meta.Lab.models.Booking;
 import SanMosb.Meta.Lab.services.BookingService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -18,10 +19,17 @@ public class BookingController {
 
     @PreAuthorize("hasRole('USER')")
     @PostMapping("/book")
-    public Booking bookSlot(@RequestParam Long slotId,
-                            @RequestParam int clientId) {
-        Booking booking = bookingService.bookSlot(slotId, clientId);
-        return booking;
+    public ResponseEntity<?> bookSlot(@RequestParam Long slotId, @RequestParam int clientId) {
+        try {
+            Booking booking = bookingService.bookSlot(slotId, clientId);
+            return ResponseEntity.ok(booking);
+        } catch (IllegalStateException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
     }
 
     @PreAuthorize("hasRole('USER')")

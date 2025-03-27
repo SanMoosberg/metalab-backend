@@ -39,4 +39,10 @@ public class TimeSlotController {
     public void blockSlot(@PathVariable Long slotId) {
         timeSlotService.blockSlot(slotId);
     }
+
+    @PostMapping("/{slotId}/unblock")
+    @PreAuthorize("hasRole('ADMIN')")
+    public void unblockSlot(@PathVariable Long slotId) {
+        this.timeSlotService.unblockSlot(slotId);
+    }
 }
