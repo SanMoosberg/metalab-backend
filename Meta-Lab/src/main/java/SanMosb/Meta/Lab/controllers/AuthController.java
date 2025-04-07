@@ -3,7 +3,7 @@ package SanMosb.Meta.Lab.controllers;
 import SanMosb.Meta.Lab.jwt.JwtUtils;
 import SanMosb.Meta.Lab.models.Client;
 
-import SanMosb.Meta.Lab.services.ClientServices;
+import SanMosb.Meta.Lab.services.ClientService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,10 +19,10 @@ import java.util.Map;
 @RequestMapping("/api/auth")
 public class AuthController {
 
-    private final ClientServices clientServices;
+    private final ClientService clientServices;
 
     @Autowired
-    public AuthController(JwtUtils jwtUtils, ClientServices clientServices) {
+    public AuthController(JwtUtils jwtUtils, ClientService clientServices) {
         this.clientServices = clientServices;
     }
 

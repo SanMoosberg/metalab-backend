@@ -1,8 +1,8 @@
 package SanMosb.Meta.Lab.controllers;
 
 import SanMosb.Meta.Lab.models.Product;
-import SanMosb.Meta.Lab.services.ClientServices;
-import SanMosb.Meta.Lab.services.ProductServices;
+import SanMosb.Meta.Lab.services.ClientService;
+import SanMosb.Meta.Lab.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,11 +15,11 @@ import java.util.List;
 @RequestMapping("/api")
 public class ProductController {
 
-    private final ClientServices clientServices;
-    private final ProductServices productServices;
+    private final ClientService clientServices;
+    private final ProductService productServices;
 
     @Autowired
-    public ProductController(ClientServices clientServices, ProductServices productServices) {
+    public ProductController(ClientService clientServices, ProductService productServices) {
         this.productServices = productServices;
         this.clientServices = clientServices;
     }

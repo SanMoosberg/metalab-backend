@@ -23,15 +23,13 @@ public class TimeSlotController {
     @PostMapping("/generate")
     public List<TimeSlot> generateSlots(@RequestParam("date") String dateStr) {
         LocalDate date = LocalDate.parse(dateStr);
-        List<TimeSlot> slots = timeSlotService.generateTimeSlots(date);
-        return slots;
+        return timeSlotService.generateTimeSlots(date);
     }
 
     @GetMapping
     public List<TimeSlot> getSlotsByDate(@RequestParam("date") String dateStr) {
         LocalDate date = LocalDate.parse(dateStr);
-        List<TimeSlot> slots = timeSlotService.getSlotsByDate(date);
-        return slots;
+        return timeSlotService.getSlotsByDate(date);
     }
 
     @PostMapping("/{slotId}/block")

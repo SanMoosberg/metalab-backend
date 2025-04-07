@@ -40,8 +40,7 @@ public class BookingController {
 
     @GetMapping("/{slotId}")
     public Booking getBookingBySlotId(@PathVariable Long slotId) {
-        Booking booking = bookingService.getBookingBySlotId(slotId);
-        return booking;
+        return bookingService.getBookingBySlotId(slotId);
     }
 
     @GetMapping("/by-client/{clientId}")

@@ -47,13 +47,11 @@ public class TimeSlotService {
             }
             current = slotEnd;
         }
-        List<TimeSlot> savedSlots = timeSlotRepository.saveAll(newSlots);
-        return savedSlots;
+        return timeSlotRepository.saveAll(newSlots);
     }
 
     public List<TimeSlot> getSlotsByDate(LocalDate date) {
-        List<TimeSlot> slots = timeSlotRepository.findByDate(date);
-        return slots;
+        return timeSlotRepository.findByDate(date);
     }
 
     public TimeSlot getSlotById(Long slotId) {
@@ -67,22 +65,20 @@ public class TimeSlotService {
         TimeSlot slot = timeSlotRepository.findById(slotId)
                 .orElseThrow(() -> new RuntimeException("Slot not found: " + slotId));
         slot.setStatus(SlotStatus.ADMIN_BLOCKED);
-        TimeSlot updatedSlot = timeSlotRepository.save(slot);
-        return updatedSlot;
+        return timeSlotRepository.save(slot);
     }
+
     @Transactional
     public TimeSlot unblockSlot(Long slotId) {
         TimeSlot slot = timeSlotRepository.findById(slotId)
                 .orElseThrow(() -> new RuntimeException("Slot not found: " + slotId));
         slot.setStatus(SlotStatus.FREE);
-        TimeSlot updatedSlot = timeSlotRepository.save(slot);
-        return updatedSlot;
+        return timeSlotRepository.save(slot);
     }
 
     @Transactional
     public TimeSlot saveSlot(TimeSlot slot) {
-        TimeSlot savedSlot = timeSlotRepository.save(slot);
-        return savedSlot;
+        return timeSlotRepository.save(slot);
     }
 
     @Scheduled(cron = "0 0 0 * * ?")

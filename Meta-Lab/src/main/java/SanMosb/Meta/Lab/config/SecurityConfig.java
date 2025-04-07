@@ -2,7 +2,7 @@ package SanMosb.Meta.Lab.config;
 
 import SanMosb.Meta.Lab.jwt.JwtAuthenticationFilter;
 import SanMosb.Meta.Lab.jwt.JwtUtils;
-import SanMosb.Meta.Lab.services.ClientDetailsServices;
+import SanMosb.Meta.Lab.services.ClientDetailsService;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,10 +22,10 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class SecurityConfig {
 
-    private final ClientDetailsServices clientDetailsServices;
+    private final ClientDetailsService clientDetailsServices;
     private final JwtUtils jwtUtils;
 
-    public SecurityConfig(ClientDetailsServices clientDetailsServices, JwtUtils jwtUtils) {
+    public SecurityConfig(ClientDetailsService clientDetailsServices, JwtUtils jwtUtils) {
         this.clientDetailsServices = clientDetailsServices;
         this.jwtUtils = jwtUtils;
     }
