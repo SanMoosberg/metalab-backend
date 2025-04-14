@@ -5,24 +5,31 @@ Metalab Backend is a Spring Boot RESTful API for managing time slot bookings, cl
 KEY FEATURES:
 
 JSON-based login with JWT token security.
+
 Manage time slots and reservations.
+
 Basic CRUD for products and client orders.
 
 PREREQUISITES:
 
 Java: 11+
+
 Maven
-PostgreSQL
-Configuration
+
+PostgreSQL Configuration
 
 IMPORTANT:
 
 The repository contains a sample config file: application.properties.example. Your actual configuration file (application.properties) is excluded via .gitignore.
+
 To configure the application, follow these steps:
 
 Create a Configuration File:
+
 Create a file at src/main/resources/application.properties based on the sample provided.
+
 Update the Settings:
+
 Change the database URL, username, password, and JWT secret with your own values.
 
 RUNNING THE APPLICATION:
