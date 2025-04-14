@@ -1,47 +1,40 @@
-METALAB BACKEND
+# METALAB BACKEND
 
 Metalab Backend is a Spring Boot RESTful API for managing time slot bookings, client profiles, and product operations.
 
-KEY FEATURES:
+## KEY FEATURES
 
-JSON-based login with JWT token security.
+- **JSON-based login with JWT token security.**
+- **Manage time slots and reservations.**
+- **Basic CRUD for products and client orders.**
 
-Manage time slots and reservations.
+## PREREQUISITES
 
-Basic CRUD for products and client orders.
+- **Java:** 11+
+- **Maven**
+- **PostgreSQL**
 
-PREREQUISITES:
+## CONFIGURATION
 
-Java: 11+
+> **IMPORTANT:**  
+> The repository contains a sample config file: `application.properties.example`.  
+> Your actual configuration file (`application.properties`) is excluded via `.gitignore`.
 
-Maven
+### To configure the application, follow these steps:
 
-PostgreSQL Configuration
+1. **Create a Configuration File:**  
+   Create a file at `src/main/resources/application.properties` based on the sample provided.
 
-IMPORTANT:
+2. **Update the Settings:**  
+   Change the database URL, username, password, and JWT secret with your own values.
 
-The repository contains a sample config file: application.properties.example. Your actual configuration file (application.properties) is excluded via .gitignore.
+## RUNNING THE APPLICATION
 
-To configure the application, follow these steps:
-
-Create a Configuration File:
-
-Create a file at src/main/resources/application.properties based on the sample provided.
-
-Update the Settings:
-
-Change the database URL, username, password, and JWT secret with your own values.
-
-RUNNING THE APPLICATION:
-
-Step 1: Build the Project
-Open a terminal and run the following command:
-
-mvn clean install
-
-Step 2: Run the Application
-After a successful build, run the generated JAR file with:
-
-java -jar target/metalab-backend.jar
-
-
+1. **Build the Project:**  
+   Open a terminal and run the following command:
+   ```bash
+   mvn clean install
+2. **Run the Application:**
+   After a successful build, run the generated JAR file with:
+   ```bash
+   java -jar target/metalab-backend.jar
