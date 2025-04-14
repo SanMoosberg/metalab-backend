@@ -1,14 +1,14 @@
-Metalab Backend
+METALAB BACKEND
 
 Metalab Backend is a Spring Boot RESTful API for managing time slot bookings, client profiles, and product operations.
 
-Key Features:
+KEY FEATURES:
 
 JSON-based login with JWT token security.
 Manage time slots and reservations.
 Basic CRUD for products and client orders.
 
-Prerequisites:
+PREREQUISITES:
 
 Java: 11+
 Maven
@@ -25,7 +25,7 @@ Create a file at src/main/resources/application.properties based on the sample p
 Update the Settings:
 Change the database URL, username, password, and JWT secret with your own values.
 
-Running the Application:
+RUNNING THE APPLICATION:
 
 Step 1: Build the Project
 Open a terminal and run the following command:
